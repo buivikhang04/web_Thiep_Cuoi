@@ -12,12 +12,12 @@
       rel="stylesheet"
     />
 
-
     <script>
       window.WEDDING_REMOTE = window.WEDDING_REMOTE || {
-        supabaseUrl: "",
-        supabasePublishableKey: "",
-        tableName: "wedding_cards"
+        supabaseUrl: "https://phlhfyqfmrvrcnmfkihc.supabase.co",
+        supabasePublishableKey:
+          "sb_publishable_l7WbE26nY5rLZaz601I-dQ_iM5HjyxQ",
+        tableName: "wedding_cards",
       };
     </script>
 
@@ -2569,7 +2569,6 @@
         box-shadow: 0 10px 24px rgba(20, 14, 16, 0.14);
       }
 
-
       body.guest-view .mobile-edit-bar,
       body.guest-view .preview-topbar {
         display: none !important;
@@ -2651,7 +2650,6 @@
           display: flex;
         }
       }
-
     </style>
   </head>
   <body>
@@ -3109,7 +3107,8 @@
             </button>
             <div class="share-status" id="shareStatus">
               Chưa cấu hình chia sẻ online. Điền <strong>supabaseUrl</strong> và
-              <strong>supabasePublishableKey</strong> trong file để dùng nút sao chép link.
+              <strong>supabasePublishableKey</strong> trong file để dùng nút sao
+              chép link.
             </div>
             <input
               id="jsonImportInput"
@@ -3126,10 +3125,18 @@
       <div class="preview-surface" id="preview-surface">
         <div class="petals-layer" id="petals-layer"></div>
         <div class="preview-topbar" id="preview-topbar">
-          <button class="btn btn-secondary" type="button" id="mobileBackToEditBtn">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            id="mobileBackToEditBtn"
+          >
             Sửa
           </button>
-          <button class="btn btn-primary" type="button" id="mobileCopyLinkBtnTop">
+          <button
+            class="btn btn-primary"
+            type="button"
+            id="mobileCopyLinkBtnTop"
+          >
             Sao chép link
           </button>
         </div>
@@ -3858,7 +3865,9 @@
       function getRemoteConfig() {
         const remote = window.WEDDING_REMOTE || {};
         return {
-          supabaseUrl: String(remote.supabaseUrl || "").trim().replace(/\/$/, ""),
+          supabaseUrl: String(remote.supabaseUrl || "")
+            .trim()
+            .replace(/\/$/, ""),
           supabasePublishableKey: String(
             remote.supabasePublishableKey || "",
           ).trim(),
@@ -3870,8 +3879,8 @@
         const remote = getRemoteConfig();
         return Boolean(
           remote.supabaseUrl &&
-            remote.supabasePublishableKey &&
-            remote.tableName,
+          remote.supabasePublishableKey &&
+          remote.tableName,
         );
       }
 
@@ -4496,8 +4505,7 @@
 
       async function fetchRemoteCardBySlug(slug) {
         const remote = getRemoteConfig();
-        const url =
-          `${remote.supabaseUrl}/rest/v1/${remote.tableName}?slug=eq.${encodeURIComponent(slug)}&select=*`;
+        const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}?slug=eq.${encodeURIComponent(slug)}&select=*`;
         const response = await fetch(url, {
           headers: {
             apikey: remote.supabasePublishableKey,
@@ -4551,7 +4559,12 @@
         const row = rows?.[0] || payload;
         const viewUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}`;
         const editUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}&edit=1&editKey=${encodeURIComponent(row.edit_key || currentEditKey)}`;
-        return { slug: row.slug, editKey: row.edit_key || currentEditKey, viewUrl, editUrl };
+        return {
+          slug: row.slug,
+          editKey: row.edit_key || currentEditKey,
+          viewUrl,
+          editUrl,
+        };
       }
 
       async function handleCopyShareLink(copyEdit = false) {
@@ -4569,12 +4582,16 @@
             `Đã sẵn sàng chia sẻ: <strong>${copyEdit ? "link sửa" : "link xem"}</strong> đã được sao chép.`,
             true,
           );
-          showToast(copyEdit ? "Đã sao chép link sửa." : "Đã sao chép link xem.");
+          showToast(
+            copyEdit ? "Đã sao chép link sửa." : "Đã sao chép link xem.",
+          );
           if (!copyEdit) {
             history.replaceState({}, "", result.editUrl);
           }
         } catch (error) {
-          setShareStatus("Lưu online thất bại. Kiểm tra lại cấu hình Supabase.");
+          setShareStatus(
+            "Lưu online thất bại. Kiểm tra lại cấu hình Supabase.",
+          );
           showToast(error.message || "Không thể sao chép liên kết.");
         }
       }
@@ -4716,28 +4733,44 @@ ${previewClone.outerHTML}
       }
 
       function bindMobileAndShareActions() {
-        document.getElementById("previewModeBtn")?.addEventListener("click", () => {
-          if (isMobileLayout()) {
+        document
+          .getElementById("previewModeBtn")
+          ?.addEventListener("click", () => {
+            if (isMobileLayout()) {
+              setMobilePreviewMode(true);
+              replayInvitation();
+            } else {
+              showToast("Ở máy tính bạn xem preview ngay bên phải.");
+            }
+          });
+
+        document
+          .getElementById("mobilePreviewBtn")
+          ?.addEventListener("click", () => {
             setMobilePreviewMode(true);
             replayInvitation();
-          } else {
-            showToast("Ở máy tính bạn xem preview ngay bên phải.");
-          }
-        });
-
-        document.getElementById("mobilePreviewBtn")?.addEventListener("click", () => {
-          setMobilePreviewMode(true);
-          replayInvitation();
-        });
+          });
 
         const backToEdit = () => setMobilePreviewMode(false);
-        document.getElementById("mobileEditBtn")?.addEventListener("click", backToEdit);
-        document.getElementById("mobileBackToEditBtn")?.addEventListener("click", backToEdit);
+        document
+          .getElementById("mobileEditBtn")
+          ?.addEventListener("click", backToEdit);
+        document
+          .getElementById("mobileBackToEditBtn")
+          ?.addEventListener("click", backToEdit);
 
-        document.getElementById("shareLinkBtn")?.addEventListener("click", () => handleCopyShareLink(false));
-        document.getElementById("copyEditLinkBtn")?.addEventListener("click", () => handleCopyShareLink(true));
-        document.getElementById("mobileCopyLinkBtn")?.addEventListener("click", () => handleCopyShareLink(false));
-        document.getElementById("mobileCopyLinkBtnTop")?.addEventListener("click", () => handleCopyShareLink(false));
+        document
+          .getElementById("shareLinkBtn")
+          ?.addEventListener("click", () => handleCopyShareLink(false));
+        document
+          .getElementById("copyEditLinkBtn")
+          ?.addEventListener("click", () => handleCopyShareLink(true));
+        document
+          .getElementById("mobileCopyLinkBtn")
+          ?.addEventListener("click", () => handleCopyShareLink(false));
+        document
+          .getElementById("mobileCopyLinkBtnTop")
+          ?.addEventListener("click", () => handleCopyShareLink(false));
 
         document.querySelectorAll(".panel-card").forEach((card, index) => {
           if (index < 6) {
@@ -4784,6 +4817,5 @@ ${previewClone.outerHTML}
         Sao chép link
       </button>
     </div>
-
   </body>
 </html>
