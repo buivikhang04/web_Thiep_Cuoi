@@ -1814,23 +1814,27 @@
       .family-role {
         margin-bottom: 8px;
       }
+
       .family-names {
         width: 100%;
-        min-height: 96px;
+        min-height: 70px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
       }
+
       .family-name {
         font-weight: 700;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         font-size: 15px;
-        line-height: 1.28;
+        line-height: 1.24;
       }
+
       .family-address {
         font-size: 13px;
         line-height: 1.5;
         width: 100%;
+        margin-top: 8px;
       }
 
       .wedding-announcement {
@@ -2503,13 +2507,28 @@
         }
       }
 
+      @media (min-width: 641px) {
+        .family-names {
+          min-height: 58px;
+        }
+
+        .family-address {
+          margin-top: 6px;
+        }
+      }
+
       @media (max-width: 640px) {
         .family-grid {
           gap: 12px;
           padding: 24px 18px 10px;
         }
+
         .family-names {
-          min-height: 120px;
+          min-height: 118px;
+        }
+
+        .family-address {
+          margin-top: 6px;
         }
       }
 
