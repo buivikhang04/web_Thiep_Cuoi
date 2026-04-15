@@ -1306,12 +1306,6 @@
       }
 
       @media (max-width: 640px) {
-        .family-col .family-name:nth-of-type(2) {
-          min-height: 4.2em;
-        }
-      }
-
-      @media (max-width: 640px) {
         .editor-header h1 {
           font-size: 30px;
         }
@@ -1820,15 +1814,18 @@
       .family-role {
         margin-bottom: 8px;
       }
+      .family-names {
+        width: 100%;
+        min-height: 96px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
       .family-name {
         font-weight: 700;
         margin-bottom: 6px;
         font-size: 15px;
         line-height: 1.28;
-        width: 100%;
-      }
-      .family-col .family-name:nth-of-type(2) {
-        min-height: 3.9em;
       }
       .family-address {
         font-size: 13px;
@@ -2503,6 +2500,16 @@
         .opening-btn {
           min-width: 180px !important;
           font-size: 16px !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .family-grid {
+          gap: 12px;
+          padding: 24px 18px 10px;
+        }
+        .family-names {
+          min-height: 120px;
         }
       }
 
@@ -3279,11 +3286,13 @@
               <div class="family-grid">
                 <div class="family-col">
                   <div class="family-role">Ông Bà</div>
-                  <div class="family-name" id="family-left-line1">
-                    Vũ Văn Hiệp
-                  </div>
-                  <div class="family-name" id="family-left-line2">
-                    Nguyễn Thị Ánh
+                  <div class="family-names">
+                    <div class="family-name" id="family-left-line1">
+                      Vũ Văn Hiệp
+                    </div>
+                    <div class="family-name" id="family-left-line2">
+                      Nguyễn Thị Ánh
+                    </div>
                   </div>
                   <div class="family-address" id="family-left-address">
                     Số 9, Ngõ 102 Trường Chinh, Đống Đa, Hà Nội
@@ -3292,11 +3301,13 @@
                 <div class="family-divider"></div>
                 <div class="family-col">
                   <div class="family-role">Ông Bà</div>
-                  <div class="family-name" id="family-right-line1">
-                    Đỗ Văn Tuyên
-                  </div>
-                  <div class="family-name" id="family-right-line2">
-                    Lê Thị Vân
+                  <div class="family-names">
+                    <div class="family-name" id="family-right-line1">
+                      Đỗ Văn Tuyên
+                    </div>
+                    <div class="family-name" id="family-right-line2">
+                      Lê Thị Vân
+                    </div>
                   </div>
                   <div class="family-address" id="family-right-address">
                     Số 32, Phố Đội Cấn, Ba Đình, Hà Nội
