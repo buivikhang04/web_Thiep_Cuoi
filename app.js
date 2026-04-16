@@ -21,7 +21,7 @@ const DEFAULT_QR =
     </svg>
   `);
 
-const STORAGE_KEY = "wedding-red-modern-v3";
+const STORAGE_KEY = "wedding-red-modern-v4";
 
 const DEFAULT_CONFIG = {
   groomName: "Đức Anh",
@@ -76,6 +76,19 @@ const DEFAULT_CONFIG = {
   },
 };
 
+const galleryIds = [
+  "gallery-1",
+  "gallery-2",
+  "gallery-3",
+  "gallery-4",
+  "gallery-5",
+  "gallery-6",
+  "gallery-7",
+  "gallery-8",
+  "gallery-9",
+  "gallery-10",
+];
+
 const els = {
   editorShell: document.getElementById("editor-shell"),
   openingStage: document.getElementById("opening-stage"),
@@ -89,19 +102,6 @@ const els = {
   qrModal: document.getElementById("qr-modal"),
   shareStatus: document.getElementById("shareStatus"),
 };
-
-const galleryIds = [
-  "gallery-1",
-  "gallery-2",
-  "gallery-3",
-  "gallery-4",
-  "gallery-5",
-  "gallery-6",
-  "gallery-7",
-  "gallery-8",
-  "gallery-9",
-  "gallery-10",
-];
 
 let config = loadConfig();
 let countdownTimer = null;
@@ -145,7 +145,7 @@ function loadConfig() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return cloneDeep(DEFAULT_CONFIG);
     return deepMerge(DEFAULT_CONFIG, JSON.parse(raw));
-  } catch (error) {
+  } catch {
     return cloneDeep(DEFAULT_CONFIG);
   }
 }
@@ -154,7 +154,7 @@ function saveConfig(show = false) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
     if (show) showToast("Đã lưu cấu hình vào trình duyệt của bạn.");
-  } catch (error) {
+  } catch {
     showToast("Không lưu được localStorage.");
   }
 }
@@ -163,8 +163,8 @@ function showToast(message) {
   if (!els.toast) return;
   els.toast.textContent = message;
   els.toast.classList.add("show");
-  clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(() => {
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => {
     els.toast.classList.remove("show");
   }, 2400);
 }
@@ -188,7 +188,7 @@ function setImage(id, src) {
 function setLink(id, href, hiddenWhenEmpty = true) {
   const el = document.getElementById(id);
   if (!el) return;
-  const valid = typeof href === "string" && href.trim().length > 0;
+  const valid = typeof href === "string" && href.trim();
   el.href = valid ? href : "#";
   if (hiddenWhenEmpty) {
     el.classList.toggle("is-hidden", !valid);
@@ -235,7 +235,7 @@ async function copyText(text) {
 }
 
 /* =========================
-   REMOTE SHARE
+   REMOTE SHARE / SUPABASE
 ========================= */
 function getRemoteConfig() {
   const remote = window.WEDDING_REMOTE || {};
@@ -342,7 +342,9 @@ async function handleCopyShareLink() {
     history.replaceState(
       {},
       "",
-      `${window.location.pathname}?edit=1&card=${encodeURIComponent(result.slug)}&editKey=${encodeURIComponent(result.editKey)}`,
+      `${window.location.pathname}?edit=1&card=${encodeURIComponent(
+        result.slug,
+      )}&editKey=${encodeURIComponent(result.editKey)}`,
     );
   } catch (error) {
     setShareStatus("Lưu online thất bại. Kiểm tra lại cấu hình Supabase.");
@@ -473,10 +475,12 @@ function applyConfig() {
 
   syncGalleryDomImages();
   updateGalleryMoreLabel();
-
   setLink("map-button", config.mapLink, true);
 
-  els.siteRoot.dataset.countdownTarget = config.countdownTarget || "";
+  if (els.siteRoot) {
+    els.siteRoot.dataset.countdownTarget = config.countdownTarget || "";
+  }
+
   updateCountdown();
   updateDetailedDate();
   updateSectionVisibility();
@@ -484,7 +488,7 @@ function applyConfig() {
 }
 
 /* =========================
-   INPUTS
+   INPUTS / EDITOR
 ========================= */
 function populateInputs() {
   const values = {
@@ -539,7 +543,7 @@ function bindTextInput(id, key, nested) {
   const input = document.getElementById(id);
   if (!input) return;
 
-  const handler = () => {
+  input.addEventListener("input", () => {
     if (nested) {
       config[nested][key] = input.value;
     } else {
@@ -547,9 +551,7 @@ function bindTextInput(id, key, nested) {
     }
     applyConfig();
     saveConfig();
-  };
-
-  input.addEventListener("input", handler);
+  });
 }
 
 function bindToggle(id, key) {
@@ -606,7 +608,7 @@ function bindImageUpload(inputId, updater, options = {}) {
       applyConfig();
       saveConfig();
       showToast("Ảnh đã được cập nhật.");
-    } catch (error) {
+    } catch {
       showToast("Đọc ảnh thất bại. Bạn thử lại giúp mình nhé.");
     } finally {
       input.value = "";
@@ -718,13 +720,14 @@ function bindEditor() {
 function updateCountdown() {
   clearInterval(countdownTimer);
 
-  const target = new Date(els.siteRoot.dataset.countdownTarget || "").getTime();
+  const target = new Date(
+    els.siteRoot?.dataset.countdownTarget || "",
+  ).getTime();
 
   if (!Number.isFinite(target)) return;
 
   const tick = () => {
     const diff = target - Date.now();
-
     const values =
       diff > 0
         ? {
@@ -763,10 +766,10 @@ function startPetals() {
     const petal = document.createElement("span");
     petal.className = "petal";
     petal.style.left = Math.random() * 100 + "%";
-    petal.style.setProperty("--drift-x", Math.random() * 120 - 60 + "px");
-    petal.style.animationDuration = 4.8 + Math.random() * 3.6 + "s";
-    petal.style.width = 10 + Math.random() * 10 + "px";
-    petal.style.height = 10 + Math.random() * 10 + "px";
+    petal.style.setProperty("--drift-x", `${Math.random() * 120 - 60}px`);
+    petal.style.animationDuration = `${4.8 + Math.random() * 3.6}s`;
+    petal.style.width = `${10 + Math.random() * 10}px`;
+    petal.style.height = `${10 + Math.random() * 10}px`;
     els.petalsLayer.appendChild(petal);
 
     setTimeout(() => petal.remove(), 9000);
@@ -774,7 +777,7 @@ function startPetals() {
 }
 
 /* =========================
-   OPEN / REVEAL
+   OPENING / REVEAL
 ========================= */
 function revealSequential() {
   document.querySelectorAll("[data-reveal]").forEach((el, index) => {
@@ -797,8 +800,9 @@ function openInvitation() {
 
 function replayInvitation() {
   els.openingStage?.classList.remove("is-opened", "is-opening");
+  els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
-  els.siteRoot.scrollTop = 0;
+  if (els.siteRoot) els.siteRoot.scrollTop = 0;
 
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     el.classList.remove("is-inview");
@@ -845,7 +849,9 @@ function updateLightbox() {
   currentLightboxIndex =
     (currentLightboxIndex + sources.length) % sources.length;
 
-  els.lightboxImage.src = sources[currentLightboxIndex];
+  if (els.lightboxImage) {
+    els.lightboxImage.src = sources[currentLightboxIndex];
+  }
 
   if (els.lightboxCounter) {
     els.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${sources.length}`;
@@ -856,12 +862,12 @@ function updateLightbox() {
 
 function openLightbox(index) {
   currentLightboxIndex = index;
-  els.lightbox.classList.add("show");
+  els.lightbox?.classList.add("show");
   updateLightbox();
 }
 
 function closeLightbox() {
-  els.lightbox.classList.remove("show");
+  els.lightbox?.classList.remove("show");
 }
 
 function bindPreviewActions() {
@@ -898,11 +904,11 @@ function bindPreviewActions() {
   });
 
   document.querySelectorAll("[data-open-qr]").forEach((btn) => {
-    btn.addEventListener("click", () => els.qrModal.classList.add("show"));
+    btn.addEventListener("click", () => els.qrModal?.classList.add("show"));
   });
 
   document.querySelector("[data-close-qr]")?.addEventListener("click", () => {
-    els.qrModal.classList.remove("show");
+    els.qrModal?.classList.remove("show");
   });
 
   els.qrModal?.addEventListener("click", (event) => {
@@ -914,15 +920,18 @@ function bindPreviewActions() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeLightbox();
-      els.qrModal.classList.remove("show");
+      els.qrModal?.classList.remove("show");
     }
 
-    if (event.key === "ArrowRight" && els.lightbox.classList.contains("show")) {
+    if (
+      event.key === "ArrowRight" &&
+      els.lightbox?.classList.contains("show")
+    ) {
       currentLightboxIndex += 1;
       updateLightbox();
     }
 
-    if (event.key === "ArrowLeft" && els.lightbox.classList.contains("show")) {
+    if (event.key === "ArrowLeft" && els.lightbox?.classList.contains("show")) {
       currentLightboxIndex -= 1;
       updateLightbox();
     }
@@ -943,9 +952,6 @@ async function initViewMode() {
   if (!editMode) {
     document.body.classList.add("guest-view");
     els.editorShell?.setAttribute("hidden", "hidden");
-    els.openingStage?.classList.add("is-opened");
-    els.siteRoot?.classList.add("is-visible");
-    revealSequential();
   } else {
     els.editorShell?.removeAttribute("hidden");
     document.body.classList.remove("guest-view");
@@ -959,7 +965,7 @@ async function initViewMode() {
         populateInputs();
         applyConfig();
       }
-    } catch (error) {
+    } catch {
       showToast("Không tải được dữ liệu thiệp từ link.");
     }
   }
@@ -974,9 +980,14 @@ async function initViewMode() {
   if (editMode) {
     replayInvitation();
   } else {
-    els.openingStage?.classList.add("is-opened");
-    els.siteRoot?.classList.add("is-visible");
-    revealSequential();
+    els.openingStage?.classList.remove("is-opened", "is-opening");
+    els.openingStage?.removeAttribute("hidden");
+    els.siteRoot?.classList.remove("is-visible");
+    if (els.siteRoot) els.siteRoot.scrollTop = 0;
+
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      el.classList.remove("is-inview");
+    });
   }
 }
 
@@ -1009,15 +1020,15 @@ function bindMobileAndShareActions() {
 
   document
     .getElementById("shareLinkBtn")
-    ?.addEventListener("click", () => handleCopyShareLink());
+    ?.addEventListener("click", handleCopyShareLink);
 
   document
     .getElementById("mobileCopyLinkBtn")
-    ?.addEventListener("click", () => handleCopyShareLink());
+    ?.addEventListener("click", handleCopyShareLink);
 
   document
     .getElementById("mobileCopyLinkBtnTop")
-    ?.addEventListener("click", () => handleCopyShareLink());
+    ?.addEventListener("click", handleCopyShareLink);
 
   document.querySelectorAll(".panel-card").forEach((card, index) => {
     if (index < 6) {
@@ -1046,6 +1057,25 @@ function bindMobileAndShareActions() {
 }
 
 /* =========================
+   PAGE SHOW FIX
+========================= */
+window.addEventListener("pageshow", () => {
+  const params = new URLSearchParams(window.location.search);
+  const isGuestView = params.has("card") && params.get("edit") !== "1";
+
+  if (isGuestView) {
+    els.openingStage?.classList.remove("is-opened", "is-opening");
+    els.openingStage?.removeAttribute("hidden");
+    els.siteRoot?.classList.remove("is-visible");
+    if (els.siteRoot) els.siteRoot.scrollTop = 0;
+
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      el.classList.remove("is-inview");
+    });
+  }
+});
+
+/* =========================
    RESET
 ========================= */
 function resetToDefault() {
@@ -1058,7 +1088,7 @@ function resetToDefault() {
 }
 
 /* =========================
-   INIT
+   START
 ========================= */
 bindPreviewActions();
 bindEditor();
