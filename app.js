@@ -21,7 +21,7 @@ const DEFAULT_QR =
     </svg>
   `);
 
-const STORAGE_KEY = "wedding-red-modern-v4";
+const STORAGE_KEY = "wedding-red-modern-v5";
 
 const DEFAULT_CONFIG = {
   groomName: "Đức Anh",
@@ -274,25 +274,25 @@ async function fetchRemoteCardBySlug(slug) {
   return rows?.[0] || null;
 }
 
+// Mỗi lần xuất luôn tạo 1 thiệp mới
 async function saveRemoteCard() {
   if (!canUseRemoteShare()) {
     throw new Error("Bạn chưa cấu hình Supabase trong window.WEDDING_REMOTE.");
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const currentSlug = params.get("card") || createSlug();
-  const currentEditKey = params.get("editKey") || createEditKey();
   const remote = getRemoteConfig();
+  const newSlug = createSlug();
+  const newEditKey = createEditKey();
 
   const payload = {
-    slug: currentSlug,
-    edit_key: currentEditKey,
+    slug: newSlug,
+    edit_key: newEditKey,
     title: `${config.groomName} & ${config.brideName}`,
     config: config,
     updated_at: new Date().toISOString(),
   };
 
-  const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}?on_conflict=slug`;
+  const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -300,55 +300,52 @@ async function saveRemoteCard() {
       "Content-Type": "application/json",
       apikey: remote.supabasePublishableKey,
       Authorization: `Bearer ${remote.supabasePublishableKey}`,
-      Prefer: "resolution=merge-duplicates,return=representation",
+      Prefer: "return=representation",
     },
     body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(body || "Không lưu được thiệp online.");
+    throw new Error(body || "Không xuất được thiệp online.");
   }
 
   const rows = await response.json();
   const row = rows?.[0] || payload;
 
   const viewUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}`;
+  const editUrl = `${window.location.origin}${window.location.pathname}?edit=1&card=${encodeURIComponent(row.slug)}&editKey=${encodeURIComponent(row.edit_key || newEditKey)}`;
 
   return {
     slug: row.slug,
-    editKey: row.edit_key || currentEditKey,
+    editKey: row.edit_key || newEditKey,
     viewUrl,
+    editUrl,
   };
 }
 
 async function handleCopyShareLink() {
   try {
     if (!canUseRemoteShare()) {
-      showToast("Chưa cấu hình Supabase nên chưa sao chép link online được.");
+      showToast("Chưa cấu hình Supabase nên chưa xuất thiệp online được.");
       return;
     }
 
-    setShareStatus("Đang lưu thiệp online...");
+    setShareStatus("Đang xuất thiệp online...");
     const result = await saveRemoteCard();
     await copyText(result.viewUrl);
 
     setShareStatus(
-      "Đã sẵn sàng chia sẻ: <strong>link xem</strong> đã được sao chép.",
+      "Đã xuất xong: <strong>link xem thiệp mới</strong> đã được sao chép.",
       true,
     );
-    showToast("Đã sao chép link xem.");
+    showToast("Đã xuất thiệp online và sao chép link xem.");
 
-    history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?edit=1&card=${encodeURIComponent(
-        result.slug,
-      )}&editKey=${encodeURIComponent(result.editKey)}`,
-    );
+    // Chuyển editor sang bản edit của thiệp mới vừa tạo
+    history.replaceState({}, "", result.editUrl);
   } catch (error) {
-    setShareStatus("Lưu online thất bại. Kiểm tra lại cấu hình Supabase.");
-    showToast(error.message || "Không thể sao chép liên kết.");
+    setShareStatus("Xuất thiệp thất bại. Kiểm tra lại cấu hình Supabase.");
+    showToast(error.message || "Không thể xuất thiệp.");
   }
 }
 
@@ -972,8 +969,8 @@ async function initViewMode() {
 
   setShareStatus(
     canUseRemoteShare()
-      ? "Đã sẵn sàng chia sẻ online. Bạn có thể bấm <strong>Sao chép link xem</strong>."
-      : "Chưa cấu hình chia sẻ online. Điền <strong>supabaseUrl</strong> và <strong>supabasePublishableKey</strong> trong file để dùng nút sao chép link.",
+      ? "Mỗi lần bấm <strong>Xuất thiệp online</strong> sẽ tạo ra một thiệp mới và một link mới."
+      : "Chưa cấu hình chia sẻ online. Điền <strong>supabaseUrl</strong> và <strong>supabasePublishableKey</strong> trong file để dùng nút xuất thiệp.",
     canUseRemoteShare(),
   );
 
