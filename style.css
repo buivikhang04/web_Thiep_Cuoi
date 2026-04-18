@@ -383,7 +383,7 @@ img {
     filter 1.2s ease;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 0;
+  padding-bottom: 0; /* FIX KHOẢNG TRỐNG DƯỚI FOOTER */
 }
 .site-root.is-visible {
   opacity: 1;
@@ -983,7 +983,7 @@ img {
 }
 
 .footer {
-  margin: 0 34px 0;
+  margin: 0 34px 0; /* FIX KHOẢNG TRỐNG DƯỚI FOOTER */
   padding: 22px 18px 26px;
   background: linear-gradient(180deg, var(--wine-dark), var(--wine));
   color: white;
@@ -1151,7 +1151,7 @@ img {
 .qr-card.dual-qr {
   width: 100%;
   max-width: 680px;
-  max-height: 90vh;
+  max-height: 90vh; /* FIX TRÀN CHIỀU CAO */
   display: flex;
   flex-direction: column;
   background: #fffbf9;
@@ -1200,7 +1200,7 @@ img {
   display: flex;
   gap: 20px;
   padding: 30px;
-  overflow-y: auto;
+  overflow-y: auto; /* FIX CHO CUỘN */
 }
 .qr-person-card {
   flex: 1;
@@ -1211,7 +1211,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%; /* FIX ĐỀU NHAU */
+  height: 100%; /* FIX CHIỀU CAO ĐỀU NHAU */
 }
 .qr-role {
   color: var(--wine);
@@ -1261,7 +1261,7 @@ img {
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: auto; /* FIX CÂN BẰNG NÚT */
+  margin-top: auto; /* FIX CÂN BẰNG NÚT DƯỚI ĐÁY TRÊN DESKTOP */
 }
 .btn-download-qr:hover {
   background: #ecd5d2;
@@ -1555,7 +1555,7 @@ body.mobile-preview-mode.guest-view .preview-surface {
     height: 48px;
   }
 
-  /* FIX POPUP QR NẰM NGANG TRÊN MOBILE */
+  /* FIX POPUP QR NẰM NGANG VÀ CÂN BẰNG TRÊN MOBILE */
   .qr-header-bar {
     padding: 14px;
   }
@@ -1576,7 +1576,7 @@ body.mobile-preview-mode.guest-view .preview-surface {
     height: 120px;
     padding: 8px;
     margin-bottom: 12px;
-    flex-shrink: 0; /* FIX CHỐNG BÓP MÉO ẢNH */
+    flex-shrink: 0; /* CHỐNG BÓP MÉO ẢNH */
   }
   .qr-role {
     font-size: 12px;
@@ -1585,13 +1585,24 @@ body.mobile-preview-mode.guest-view .preview-surface {
   .qr-owner {
     font-size: 11px;
   }
+
+  /* FIX: ÉP NGÂN HÀNG TRÊN STK VÀ ĐẨY NÚT LƯU QR XUỐNG ĐÁY */
   .qr-details {
-    font-size: 10px;
-    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    margin-bottom: auto !important; /* ĐẨY NÚT XUỐNG ĐÁY */
+    padding-bottom: 12px;
+  }
+  .qr-dot {
+    display: none; /* ẨN DẤU CHẤM */
   }
   .btn-download-qr {
     padding: 8px 12px;
     font-size: 11px;
+    width: 100%; /* NÚT TRÀN NGANG DỄ BẤM */
+    margin-top: 0; /* BỎ MARGIN TOP CỦA DESKTOP */
   }
 }
 
@@ -1652,7 +1663,7 @@ body.mobile-preview-mode.guest-view .preview-surface {
 }
 
 /* =========================
-   HEART RAIN ANIMATION (UI XỊN XÒ)
+   HEART RAIN ANIMATION
 ========================= */
 .heart-fw-container {
   position: absolute;
