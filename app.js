@@ -105,6 +105,7 @@ const els = {
   lightboxCounter: document.getElementById("lightbox-counter"),
   qrModal: document.getElementById("qr-modal"),
   shareStatus: document.getElementById("shareStatus"),
+  heartFireworksContainer: document.getElementById("heart-fireworks-container"),
 };
 
 let config = loadConfig();
@@ -453,7 +454,6 @@ function applyConfig() {
   setText("family-right-address", config.familyRightAddress);
   setText("detail-lunar", config.lunarDate);
 
-  // Binding Dual Bank
   setText("bank-groom-name", config.groomName);
   setText("bank-bride-name", config.brideName);
   setText("bank-name", config.bankName);
@@ -750,7 +750,7 @@ function updateCountdown() {
 }
 
 /* =========================
-   PETALS & OPENING
+   PETALS
 ========================= */
 function startPetals() {
   clearInterval(petalTimer);
@@ -768,26 +768,88 @@ function startPetals() {
   }, 340);
 }
 
+/* =========================
+   OPENING / REVEAL & FIREWORKS
+========================= */
+function triggerFireworks() {
+  if (!els.heartFireworksContainer) return;
+
+  const heart = document.createElement("div");
+  heart.className = "fw-heart animate";
+  els.heartFireworksContainer.appendChild(heart);
+
+  setTimeout(() => {
+    const colors = ["#8c1125", "#b1263d", "#f0d28a", "#ffffff", "#e85a73"];
+    const particleCount = 70;
+
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement("div");
+      p.className = "fw-particle";
+
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = 80 + Math.random() * 220;
+      const tx = Math.cos(angle) * velocity;
+      const ty = Math.sin(angle) * velocity;
+
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.color = color;
+      p.style.backgroundColor = color;
+
+      const size = Math.random() * 5 + 3;
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+
+      els.heartFireworksContainer.appendChild(p);
+
+      p.animate(
+        [
+          { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+          {
+            transform: `translate(${tx}px, ${ty + 100}px) scale(0)`,
+            opacity: 0,
+          },
+        ],
+        {
+          duration: 800 + Math.random() * 600,
+          easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+          fill: "forwards",
+        },
+      );
+
+      setTimeout(() => p.remove(), 1600);
+    }
+  }, 600);
+
+  setTimeout(() => heart.remove(), 1200);
+}
+
 function revealSequential() {
   document.querySelectorAll("[data-reveal]").forEach((el, index) => {
     setTimeout(() => el.classList.add("is-inview"), index * 65);
   });
 }
+
 function openInvitation() {
   els.openingStage?.classList.add("is-opening");
+
+  triggerFireworks();
+
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
-  }, 520);
+  }, 750);
+
   setTimeout(() => {
     els.openingStage?.classList.add("is-opened");
-  }, 980);
+  }, 1300);
 }
+
 function replayInvitation() {
   els.openingStage?.classList.remove("is-opened", "is-opening");
   els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
   if (els.siteRoot) els.siteRoot.scrollTop = 0;
+
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     el.classList.remove("is-inview");
   });
