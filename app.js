@@ -50,6 +50,9 @@ const DEFAULT_CONFIG = {
   bankName: "Vietcombank",
   bankOwner: "VU DUC ANH",
   bankNumber: "1234567890",
+  bankNameBride: "VietinBank",
+  bankOwnerBride: "DO THI THANH MAI",
+  bankNumberBride: "0987654321",
   bankNote:
     "Quét mã QR hoặc chuyển khoản trực tiếp để gửi lời chúc đến tụi mình.",
   coverImage:
@@ -67,6 +70,7 @@ const DEFAULT_CONFIG = {
     "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
   ],
   qrImage: DEFAULT_QR,
+  qrImageBride: DEFAULT_QR,
   toggles: {
     intro: true,
     details: true,
@@ -118,11 +122,9 @@ function cloneDeep(value) {
 function deepMerge(base, extra) {
   const output = cloneDeep(base);
   if (!extra || typeof extra !== "object") return output;
-
   Object.keys(extra).forEach((key) => {
     const baseValue = output[key];
     const extraValue = extra[key];
-
     if (
       baseValue &&
       typeof baseValue === "object" &&
@@ -136,7 +138,6 @@ function deepMerge(base, extra) {
       output[key] = extraValue;
     }
   });
-
   return output;
 }
 
@@ -169,6 +170,21 @@ function showToast(message) {
   }, 2400);
 }
 
+window.downloadQR = function (imageId, filename) {
+  const img = document.getElementById(imageId);
+  if (!img || !img.src) {
+    showToast("Không tìm thấy mã QR để tải.");
+    return;
+  }
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Đang tải mã QR...");
+};
+
 function setShareStatus(message, ready = false) {
   if (!els.shareStatus) return;
   els.shareStatus.innerHTML = message;
@@ -198,7 +214,6 @@ function setLink(id, href, hiddenWhenEmpty = true) {
 function isMobileLayout() {
   return window.matchMedia("(max-width: 900px)").matches;
 }
-
 function setMobilePreviewMode(enabled) {
   document.body.classList.toggle("mobile-preview-mode", Boolean(enabled));
 }
@@ -258,32 +273,26 @@ function canUseRemoteShare() {
 async function fetchRemoteCardBySlug(slug) {
   const remote = getRemoteConfig();
   const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}?slug=eq.${encodeURIComponent(slug)}&select=*`;
-
   const response = await fetch(url, {
     headers: {
       apikey: remote.supabasePublishableKey,
       Authorization: `Bearer ${remote.supabasePublishableKey}`,
     },
   });
-
   if (!response.ok) {
     throw new Error("Không đọc được dữ liệu thiệp online.");
   }
-
   const rows = await response.json();
   return rows?.[0] || null;
 }
 
-// Mỗi lần xuất luôn tạo 1 thiệp mới
 async function saveRemoteCard() {
   if (!canUseRemoteShare()) {
     throw new Error("Bạn chưa cấu hình Supabase trong window.WEDDING_REMOTE.");
   }
-
   const remote = getRemoteConfig();
   const newSlug = createSlug();
   const newEditKey = createEditKey();
-
   const payload = {
     slug: newSlug,
     edit_key: newEditKey,
@@ -291,9 +300,7 @@ async function saveRemoteCard() {
     config: config,
     updated_at: new Date().toISOString(),
   };
-
   const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}`;
-
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -304,18 +311,14 @@ async function saveRemoteCard() {
     },
     body: JSON.stringify(payload),
   });
-
   if (!response.ok) {
     const body = await response.text();
     throw new Error(body || "Không xuất được thiệp online.");
   }
-
   const rows = await response.json();
   const row = rows?.[0] || payload;
-
   const viewUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}`;
   const editUrl = `${window.location.origin}${window.location.pathname}?edit=1&card=${encodeURIComponent(row.slug)}&editKey=${encodeURIComponent(row.edit_key || newEditKey)}`;
-
   return {
     slug: row.slug,
     editKey: row.edit_key || newEditKey,
@@ -330,18 +333,14 @@ async function handleCopyShareLink() {
       showToast("Chưa cấu hình Supabase nên chưa xuất thiệp online được.");
       return;
     }
-
     setShareStatus("Đang xuất thiệp online...");
     const result = await saveRemoteCard();
     await copyText(result.viewUrl);
-
     setShareStatus(
       "Đã xuất xong: <strong>link xem thiệp mới</strong> đã được sao chép.",
       true,
     );
     showToast("Đã xuất thiệp online và sao chép link xem.");
-
-    // Chuyển editor sang bản edit của thiệp mới vừa tạo
     history.replaceState({}, "", result.editUrl);
   } catch (error) {
     setShareStatus("Xuất thiệp thất bại. Kiểm tra lại cấu hình Supabase.");
@@ -360,11 +359,9 @@ function getCompactGalleryImages() {
 
 function syncGalleryDomImages() {
   const compact = getCompactGalleryImages();
-
   galleryIds.forEach((id, index) => {
     const el = document.getElementById(id);
     if (!el) return;
-
     const src = compact[index] || "";
     if (src) {
       el.src = src;
@@ -374,7 +371,6 @@ function syncGalleryDomImages() {
       el.hidden = true;
     }
   });
-
   document
     .querySelectorAll("#section-gallery .gallery-item")
     .forEach((item, index) => {
@@ -388,7 +384,6 @@ function updateGalleryMoreLabel() {
   const more = document.querySelector(".gallery-item.more .gallery-more-count");
   const moreItem = document.querySelector(".gallery-item.more");
   if (!more || !moreItem) return;
-
   const total = getCompactGalleryImages().length;
   const extra = Math.max(0, total - 4);
   more.textContent = extra > 0 ? "Xem thêm" : "";
@@ -404,7 +399,6 @@ function updateSectionVisibility() {
     gallery: "section-gallery",
     bank: "section-bank",
   };
-
   Object.entries(map).forEach(([key, id]) => {
     const el = document.getElementById(id);
     if (el) el.hidden = !config.toggles[key];
@@ -414,7 +408,6 @@ function updateSectionVisibility() {
 function updateDetailedDate() {
   const raw = config.countdownTarget || "";
   const date = raw ? new Date(raw) : null;
-
   if (date && Number.isFinite(date.getTime())) {
     const weekdays = [
       "Chủ nhật",
@@ -425,7 +418,6 @@ function updateDetailedDate() {
       "Thứ sáu",
       "Thứ bảy",
     ];
-
     setText("detail-weekday", weekdays[date.getDay()] || "");
     setText("detail-day", String(date.getDate()).padStart(2, "0"));
     setText("detail-month", String(date.getMonth() + 1).padStart(2, "0"));
@@ -460,15 +452,23 @@ function applyConfig() {
   setText("family-right-line2", config.familyRightLine2);
   setText("family-right-address", config.familyRightAddress);
   setText("detail-lunar", config.lunarDate);
+
+  // Binding Dual Bank
+  setText("bank-groom-name", config.groomName);
+  setText("bank-bride-name", config.brideName);
   setText("bank-name", config.bankName);
   setText("bank-owner", config.bankOwner);
   setText("bank-number", config.bankNumber);
-  setText("bank-note-modal", config.bankNote);
+  setText("bank-name-bride", config.bankNameBride);
+  setText("bank-owner-bride", config.bankOwnerBride);
+  setText("bank-number-bride", config.bankNumberBride);
+
   setText("bank-note-preview", config.bankNote);
   setText("closing-text", config.closingText);
 
   setImage("hero-image", config.coverImage);
   setImage("qr-image", config.qrImage || DEFAULT_QR);
+  setImage("qr-image-bride", config.qrImageBride || DEFAULT_QR);
 
   syncGalleryDomImages();
   updateGalleryMoreLabel();
@@ -477,7 +477,6 @@ function applyConfig() {
   if (els.siteRoot) {
     els.siteRoot.dataset.countdownTarget = config.countdownTarget || "";
   }
-
   updateCountdown();
   updateDetailedDate();
   updateSectionVisibility();
@@ -514,9 +513,11 @@ function populateInputs() {
     bankNameInput: config.bankName,
     bankOwnerInput: config.bankOwner,
     bankNumberInput: config.bankNumber,
+    bankNameBrideInput: config.bankNameBride,
+    bankOwnerBrideInput: config.bankOwnerBride,
+    bankNumberBrideInput: config.bankNumberBride,
     bankNoteInput: config.bankNote,
   };
-
   Object.entries(values).forEach(([id, value]) => {
     const input = document.getElementById(id);
     if (input) input.value = value ?? "";
@@ -529,7 +530,6 @@ function populateInputs() {
     toggleGallery: config.toggles.gallery,
     toggleBank: config.toggles.bank,
   };
-
   Object.entries(toggles).forEach(([id, checked]) => {
     const input = document.getElementById(id);
     if (input) input.checked = Boolean(checked);
@@ -539,7 +539,6 @@ function populateInputs() {
 function bindTextInput(id, key, nested) {
   const input = document.getElementById(id);
   if (!input) return;
-
   input.addEventListener("input", () => {
     if (nested) {
       config[nested][key] = input.value;
@@ -554,7 +553,6 @@ function bindTextInput(id, key, nested) {
 function bindToggle(id, key) {
   const input = document.getElementById(id);
   if (!input) return;
-
   input.addEventListener("change", () => {
     config.toggles[key] = input.checked;
     applyConfig();
@@ -567,7 +565,6 @@ async function fileToDataUrl(file, options = {}) {
     options.type || (file.type === "image/png" ? "image/png" : "image/jpeg");
   const quality = options.quality ?? 0.86;
   const maxSize = options.maxSize ?? 1600;
-
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;
@@ -594,11 +591,9 @@ async function fileToDataUrl(file, options = {}) {
 function bindImageUpload(inputId, updater, options = {}) {
   const input = document.getElementById(inputId);
   if (!input) return;
-
   input.addEventListener("change", async () => {
     const file = input.files && input.files[0];
     if (!file) return;
-
     try {
       const dataUrl = await fileToDataUrl(file, options);
       updater(dataUrl);
@@ -639,6 +634,9 @@ function bindEditor() {
   bindTextInput("bankNameInput", "bankName");
   bindTextInput("bankOwnerInput", "bankOwner");
   bindTextInput("bankNumberInput", "bankNumber");
+  bindTextInput("bankNameBrideInput", "bankNameBride");
+  bindTextInput("bankOwnerBrideInput", "bankOwnerBride");
+  bindTextInput("bankNumberBrideInput", "bankNumberBride");
   bindTextInput("bankNoteInput", "bankNote");
 
   bindToggle("toggleIntro", "intro");
@@ -650,7 +648,6 @@ function bindEditor() {
   bindImageUpload("coverUpload", (src) => {
     config.coverImage = src;
   });
-
   bindImageUpload("galleryUpload1", (src) => {
     config.galleryImages[0] = src;
   });
@@ -700,12 +697,18 @@ function bindEditor() {
     },
     { type: "image/png", quality: 0.92, maxSize: 1000 },
   );
+  bindImageUpload(
+    "qrUploadBride",
+    (src) => {
+      config.qrImageBride = src;
+    },
+    { type: "image/png", quality: 0.92, maxSize: 1000 },
+  );
 
   document.getElementById("replayBtn")?.addEventListener("click", () => {
     replayInvitation();
     showToast("Đã đưa thiệp về trạng thái chờ mở.");
   });
-
   document
     .getElementById("resetBtn")
     ?.addEventListener("click", resetToDefault);
@@ -716,13 +719,10 @@ function bindEditor() {
 ========================= */
 function updateCountdown() {
   clearInterval(countdownTimer);
-
   const target = new Date(
     els.siteRoot?.dataset.countdownTarget || "",
   ).getTime();
-
   if (!Number.isFinite(target)) return;
-
   const tick = () => {
     const diff = target - Date.now();
     const values =
@@ -734,31 +734,27 @@ function updateCountdown() {
             secs: Math.floor((diff / 1000) % 60),
           }
         : { days: 0, hours: 0, mins: 0, secs: 0 };
-
     const pairs = {
       "count-days": values.days,
       "count-hours": values.hours,
       "count-mins": values.mins,
       "count-secs": values.secs,
     };
-
     Object.entries(pairs).forEach(([id, value]) => {
       const el = document.getElementById(id);
       if (el) el.textContent = String(value).padStart(2, "0");
     });
   };
-
   tick();
   countdownTimer = setInterval(tick, 1000);
 }
 
 /* =========================
-   PETALS
+   PETALS & OPENING
 ========================= */
 function startPetals() {
   clearInterval(petalTimer);
   if (!els.petalsLayer) return;
-
   petalTimer = setInterval(() => {
     const petal = document.createElement("span");
     petal.className = "petal";
@@ -768,39 +764,30 @@ function startPetals() {
     petal.style.width = `${10 + Math.random() * 10}px`;
     petal.style.height = `${10 + Math.random() * 10}px`;
     els.petalsLayer.appendChild(petal);
-
     setTimeout(() => petal.remove(), 9000);
   }, 340);
 }
 
-/* =========================
-   OPENING / REVEAL
-========================= */
 function revealSequential() {
   document.querySelectorAll("[data-reveal]").forEach((el, index) => {
     setTimeout(() => el.classList.add("is-inview"), index * 65);
   });
 }
-
 function openInvitation() {
   els.openingStage?.classList.add("is-opening");
-
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
   }, 520);
-
   setTimeout(() => {
     els.openingStage?.classList.add("is-opened");
   }, 980);
 }
-
 function replayInvitation() {
   els.openingStage?.classList.remove("is-opened", "is-opening");
   els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
   if (els.siteRoot) els.siteRoot.scrollTop = 0;
-
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     el.classList.remove("is-inview");
   });
@@ -817,24 +804,19 @@ function getGallerySources() {
 
 function renderLightboxThumbs() {
   if (!els.lightboxThumbs) return;
-
   const sources = getGallerySources();
   els.lightboxThumbs.innerHTML = "";
-
   sources.forEach((src, index) => {
     const thumb = document.createElement("img");
     thumb.src = src;
     thumb.alt = "Ảnh thu nhỏ " + (index + 1);
-
     if (index === currentLightboxIndex) {
       thumb.classList.add("active");
     }
-
     thumb.addEventListener("click", () => {
       currentLightboxIndex = index;
       updateLightbox();
     });
-
     els.lightboxThumbs.appendChild(thumb);
   });
 }
@@ -842,18 +824,14 @@ function renderLightboxThumbs() {
 function updateLightbox() {
   const sources = getGallerySources();
   if (!sources.length) return;
-
   currentLightboxIndex =
     (currentLightboxIndex + sources.length) % sources.length;
-
   if (els.lightboxImage) {
     els.lightboxImage.src = sources[currentLightboxIndex];
   }
-
   if (els.lightboxCounter) {
     els.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${sources.length}`;
   }
-
   renderLightboxThumbs();
 }
 
@@ -862,7 +840,6 @@ function openLightbox(index) {
   els.lightbox?.classList.add("show");
   updateLightbox();
 }
-
 function closeLightbox() {
   els.lightbox?.classList.remove("show");
 }
@@ -871,31 +848,26 @@ function bindPreviewActions() {
   document.querySelectorAll("[data-open-invitation]").forEach((btn) => {
     btn.addEventListener("click", openInvitation);
   });
-
   document.querySelectorAll("[data-gallery-index]").forEach((item) => {
     item.addEventListener("click", () => {
       openLightbox(Number(item.dataset.galleryIndex || 0));
     });
   });
-
   document
     .querySelector("[data-close-lightbox]")
     ?.addEventListener("click", closeLightbox);
-
   document
     .querySelector("[data-lightbox-prev]")
     ?.addEventListener("click", () => {
       currentLightboxIndex -= 1;
       updateLightbox();
     });
-
   document
     .querySelector("[data-lightbox-next]")
     ?.addEventListener("click", () => {
       currentLightboxIndex += 1;
       updateLightbox();
     });
-
   els.lightbox?.addEventListener("click", (event) => {
     if (event.target === els.lightbox) closeLightbox();
   });
@@ -903,11 +875,9 @@ function bindPreviewActions() {
   document.querySelectorAll("[data-open-qr]").forEach((btn) => {
     btn.addEventListener("click", () => els.qrModal?.classList.add("show"));
   });
-
   document.querySelector("[data-close-qr]")?.addEventListener("click", () => {
     els.qrModal?.classList.remove("show");
   });
-
   els.qrModal?.addEventListener("click", (event) => {
     if (event.target === els.qrModal) {
       els.qrModal.classList.remove("show");
@@ -919,7 +889,6 @@ function bindPreviewActions() {
       closeLightbox();
       els.qrModal?.classList.remove("show");
     }
-
     if (
       event.key === "ArrowRight" &&
       els.lightbox?.classList.contains("show")
@@ -927,7 +896,6 @@ function bindPreviewActions() {
       currentLightboxIndex += 1;
       updateLightbox();
     }
-
     if (event.key === "ArrowLeft" && els.lightbox?.classList.contains("show")) {
       currentLightboxIndex -= 1;
       updateLightbox();
@@ -945,7 +913,6 @@ async function initViewMode() {
     params.get("edit") === "1" ||
     window.location.protocol === "file:" ||
     !hasCard;
-
   if (!editMode) {
     document.body.classList.add("guest-view");
     els.editorShell?.setAttribute("hidden", "hidden");
@@ -981,7 +948,6 @@ async function initViewMode() {
     els.openingStage?.removeAttribute("hidden");
     els.siteRoot?.classList.remove("is-visible");
     if (els.siteRoot) els.siteRoot.scrollTop = 0;
-
     document.querySelectorAll("[data-reveal]").forEach((el) => {
       el.classList.remove("is-inview");
     });
@@ -1000,49 +966,39 @@ function bindMobileAndShareActions() {
       showToast("Ở máy tính bạn xem preview ngay bên phải.");
     }
   });
-
   document.getElementById("mobilePreviewBtn")?.addEventListener("click", () => {
     setMobilePreviewMode(true);
     replayInvitation();
   });
-
   const backToEdit = () => setMobilePreviewMode(false);
-
   document
     .getElementById("mobileEditBtn")
     ?.addEventListener("click", backToEdit);
   document
     .getElementById("mobileBackToEditBtn")
     ?.addEventListener("click", backToEdit);
-
   document
     .getElementById("shareLinkBtn")
     ?.addEventListener("click", handleCopyShareLink);
-
   document
     .getElementById("mobileCopyLinkBtn")
     ?.addEventListener("click", handleCopyShareLink);
-
   document
     .getElementById("mobileCopyLinkBtnTop")
     ?.addEventListener("click", handleCopyShareLink);
-
   document.querySelectorAll(".panel-card").forEach((card, index) => {
     if (index < 6) {
       card.classList.add("is-collapsible");
       const heading = card.querySelector("h2");
-
       heading?.addEventListener("click", () => {
         if (!isMobileLayout()) return;
         card.classList.toggle("is-collapsed");
       });
-
       if (isMobileLayout() && index > 0) {
         card.classList.add("is-collapsed");
       }
     }
   });
-
   window.addEventListener("resize", () => {
     if (!isMobileLayout()) {
       setMobilePreviewMode(false);
@@ -1053,19 +1009,14 @@ function bindMobileAndShareActions() {
   });
 }
 
-/* =========================
-   PAGE SHOW FIX
-========================= */
 window.addEventListener("pageshow", () => {
   const params = new URLSearchParams(window.location.search);
   const isGuestView = params.has("card") && params.get("edit") !== "1";
-
   if (isGuestView) {
     els.openingStage?.classList.remove("is-opened", "is-opening");
     els.openingStage?.removeAttribute("hidden");
     els.siteRoot?.classList.remove("is-visible");
     if (els.siteRoot) els.siteRoot.scrollTop = 0;
-
     document.querySelectorAll("[data-reveal]").forEach((el) => {
       el.classList.remove("is-inview");
     });
@@ -1073,7 +1024,7 @@ window.addEventListener("pageshow", () => {
 });
 
 /* =========================
-   RESET
+   RESET & START
 ========================= */
 function resetToDefault() {
   config = cloneDeep(DEFAULT_CONFIG);
@@ -1084,9 +1035,6 @@ function resetToDefault() {
   showToast("Đã đưa thiệp về bản mặc định.");
 }
 
-/* =========================
-   START
-========================= */
 bindPreviewActions();
 bindEditor();
 bindMobileAndShareActions();
