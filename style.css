@@ -383,7 +383,7 @@ img {
     filter 1.2s ease;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 28px;
+  padding-bottom: 0; /* FIX KHOẢNG TRỐNG DƯỚI */
 }
 .site-root.is-visible {
   opacity: 1;
@@ -983,7 +983,7 @@ img {
 }
 
 .footer {
-  margin: 0 34px 34px;
+  margin: 0 34px 0; /* FIX KHOẢNG TRỐNG DƯỚI */
   padding: 22px 18px 26px;
   background: linear-gradient(180deg, var(--wine-dark), var(--wine));
   color: white;
@@ -1151,6 +1151,9 @@ img {
 .qr-card.dual-qr {
   width: 100%;
   max-width: 680px;
+  max-height: 90vh; /* FIX: CHỐNG TRÀN CHIỀU CAO */
+  display: flex; /* FIX: NGUYÊN KHỐI QR */
+  flex-direction: column; /* FIX: NGUYÊN KHỐI QR */
   background: #fffbf9;
   border-radius: 20px;
   padding: 0;
@@ -1197,6 +1200,7 @@ img {
   display: flex;
   gap: 20px;
   padding: 30px;
+  overflow-y: auto; /* FIX: CHO PHÉP CUỘN KHỐI THÂN NẾU DÀI */
 }
 .qr-person-card {
   flex: 1;
@@ -1531,15 +1535,42 @@ body.mobile-preview-mode.guest-view .preview-surface {
     padding: 0 12px;
   }
 
-  .qr-body {
-    flex-direction: column;
-    padding: 20px;
-  }
-  .qr-person-card {
-    padding: 20px 16px;
+  /* FIX: POPUP QR NẰM NGANG TRÊN MOBILE */
+  .qr-header-bar {
+    padding: 14px;
   }
   .qr-header-bar h3 {
-    font-size: 32px;
+    font-size: 24px;
+  }
+  .qr-body {
+    flex-direction: row;
+    padding: 16px 10px;
+    gap: 10px;
+  }
+  .qr-person-card {
+    padding: 16px 10px;
+    flex: 1;
+  }
+  .qr-img-box {
+    width: 120px;
+    height: 120px;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+  .qr-role {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  .qr-owner {
+    font-size: 11px;
+  }
+  .qr-details {
+    font-size: 10px;
+    margin-bottom: 12px;
+  }
+  .btn-download-qr {
+    padding: 8px 12px;
+    font-size: 11px;
   }
 }
 
@@ -1581,7 +1612,6 @@ body.mobile-preview-mode.guest-view .preview-surface {
   animation: spinDisk 4s linear infinite;
 }
 .music-toggle-btn::after {
-  /* Hiệu ứng gạch chéo khi tắt nhạc */
   content: "";
   position: absolute;
   width: 24px;
@@ -1619,7 +1649,7 @@ body.mobile-preview-mode.guest-view .preview-surface {
   inset: 0;
   background: #ffffff;
   opacity: 0;
-  transition: opacity 1.2s ease; /* Fade out chậm rãi mượt mà */
+  transition: opacity 1.2s ease;
   z-index: -1;
 }
 .heart-fw-container.flash-white::before {
@@ -1627,7 +1657,6 @@ body.mobile-preview-mode.guest-view .preview-surface {
   transition: opacity 0.4s ease;
 }
 
-/* Giant Red Heart */
 .fw-heart {
   position: absolute;
   width: 180px;
@@ -1667,10 +1696,9 @@ body.mobile-preview-mode.guest-view .preview-surface {
   }
 }
 
-/* Cơn mưa tim nhỏ rơi từ Header */
 .fw-falling-heart {
   position: absolute;
-  top: -40px; /* Bắt đầu rơi từ trên cùng khuất tầm nhìn */
+  top: -40px;
   transform-origin: center;
 }
 .fw-falling-heart svg {
@@ -1678,10 +1706,76 @@ body.mobile-preview-mode.guest-view .preview-surface {
   height: 100%;
 }
 
-/* Chỉnh lại transition hiện thiệp chậm rãi và "thơ" hơn */
-.site-root {
+/* =========================
+   PRELOADER (MÀN HÌNH CHỜ)
+========================= */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: var(--paper-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
-    opacity 1.8s ease,
-    transform 1.5s cubic-bezier(0.18, 0.84, 0.24, 1),
-    filter 1.2s ease;
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+}
+.preloader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.preloader-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.preloader-heart {
+  width: 50px;
+  height: 50px;
+  animation: preloaderBeat 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.preloader-heart svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba(140, 17, 37, 0.25));
+}
+.preloader-text {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--wine);
+  letter-spacing: 0.05em;
+  animation: preloaderPulseText 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes preloaderBeat {
+  0% {
+    transform: scale(0.95);
+  }
+  5% {
+    transform: scale(1.1);
+  }
+  39% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(0.95);
+  }
+}
+@keyframes preloaderPulseText {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }

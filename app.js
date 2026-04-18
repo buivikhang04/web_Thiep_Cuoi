@@ -23,21 +23,22 @@ const DEFAULT_QR =
 
 const STORAGE_KEY = "wedding-red-modern-v5";
 
+// ĐÃ SỬA: Đổi lại thông tin mặc định
 const DEFAULT_CONFIG = {
-  groomName: "Đức Anh",
-  brideName: "Thanh Mai",
-  initials: "Đ&T",
+  groomName: "Phi Phàm",
+  brideName: "Thị Hoa",
+  initials: "P&H",
   quoteTop: "all your",
   quoteMain: "LOVE",
   quoteBottom: "need is",
   closingText: "Thank You",
-  weddingDateText: "10 Tháng 5, 2026",
-  weddingTimeText: "18:00",
-  countdownTarget: "2026-05-10T18:00",
+  weddingDateText: "2 Tháng 5, 2026",
+  weddingTimeText: "09:00",
+  countdownTarget: "2026-05-02T09:00",
   introTitle: "Trân trọng kính mời",
   introText:
     "Đến dự buổi tiệc chung vui cùng gia đình chúng tôi. Sự hiện diện của bạn là món quà quý giá nhất cho hành trình yêu thương này.",
-  venueName: "Queen Bee Luxury",
+  venueName: "Tư gia",
   venueAddress: "29 Láng Hạ, Phường Láng Hạ, Hà Nội",
   mapLink: "https://maps.google.com/?q=Queen+Bee+Luxury+Lang+Ha+Ha+Noi",
   familyLeftLine1: "Vũ Văn Hiệp",
@@ -46,7 +47,7 @@ const DEFAULT_CONFIG = {
   familyRightLine1: "Đỗ Văn Tuyên",
   familyRightLine2: "Lê Thị Vân",
   familyRightAddress: "Số 32, Phố Đội Cấn, Ba Đình, Hà Nội",
-  lunarDate: "(Nhằm ngày 24/03 năm Bính Ngọ)",
+  lunarDate: "(Tức ngày 24/03 năm Bính Ngọ)",
   bankName: "Vietcombank",
   bankOwner: "VU DUC ANH",
   bankNumber: "1234567890",
@@ -107,6 +108,7 @@ const els = {
   qrModal: document.getElementById("qr-modal"),
   shareStatus: document.getElementById("shareStatus"),
   heartFireworksContainer: document.getElementById("heart-fireworks-container"),
+  preloader: document.getElementById("preloader"),
 };
 
 let config = loadConfig();
@@ -650,14 +652,12 @@ function bindEditor() {
     config.coverImage = src;
   });
 
-  // THÊM XỬ LÝ UPLOAD NHẠC
   const audioInput = document.getElementById("audioUpload");
   if (audioInput) {
     audioInput.addEventListener("change", () => {
       const file = audioInput.files[0];
       if (!file) return;
 
-      // Giới hạn file 3MB để tránh đơ trình duyệt khi lưu LocalStorage
       if (file.size > 3 * 1024 * 1024) {
         showToast(
           "File nhạc quá nặng. Vui lòng chọn file dưới 3MB để thiệp load nhanh nhé.",
@@ -814,24 +814,21 @@ function triggerHeartRain() {
   if (!els.heartFireworksContainer) return;
   els.heartFireworksContainer.classList.add("flash-white");
 
-  // 1. Kích hoạt tim đỏ khổng lồ ở giữa
   const heart = document.createElement("div");
   heart.className = "fw-heart animate";
   els.heartFireworksContainer.appendChild(heart);
 
-  // 2. Khi tim khổng lồ nổ (khoảng 800ms), tạo cơn mưa tim nhỏ rơi từ header
   setTimeout(() => {
-    const particleCount = 45; // Số lượng tim rơi
+    const particleCount = 45;
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement("div");
       p.className = "fw-falling-heart";
       p.innerHTML = `<svg viewBox="0 0 24 24" fill="#8c1125"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
 
-      // Random vị trí chiều ngang, kích thước tim và thời gian rơi
       const startX = Math.random() * 100;
-      const size = Math.random() * 16 + 10; // Tim từ 10px đến 26px
-      const duration = Math.random() * 3000 + 3500; // Rơi chậm từ 3.5s - 6.5s
-      const delay = Math.random() * 1500; // Rơi lác đác không cùng lúc
+      const size = Math.random() * 16 + 10;
+      const duration = Math.random() * 3000 + 3500;
+      const delay = Math.random() * 1500;
 
       p.style.left = `${startX}%`;
       p.style.width = `${size}px`;
@@ -840,7 +837,6 @@ function triggerHeartRain() {
 
       els.heartFireworksContainer.appendChild(p);
 
-      // Animation rơi bằng Web Animations API cực mượt
       p.animate(
         [
           { transform: `translateY(0) rotate(0deg) scale(1)`, opacity: 0.8 },
@@ -852,7 +848,7 @@ function triggerHeartRain() {
         {
           duration: duration,
           delay: delay,
-          easing: "cubic-bezier(0.37, 0, 0.63, 1)", // Rơi gia tốc tự nhiên
+          easing: "cubic-bezier(0.37, 0, 0.63, 1)",
           fill: "forwards",
         },
       );
@@ -861,10 +857,8 @@ function triggerHeartRain() {
     }
   }, 800);
 
-  // Dọn dẹp tim khổng lồ
   setTimeout(() => heart.remove(), 1200);
 
-  // 3. Xóa lớp nền trắng từ từ để lộ nội dung thiệp đang mờ mờ hiện ra
   setTimeout(() => {
     els.heartFireworksContainer.classList.remove("flash-white");
   }, 1400);
@@ -879,10 +873,8 @@ function revealSequential() {
 function openInvitation() {
   els.openingStage?.classList.add("is-opening");
 
-  // Gọi hiệu ứng Mưa Tim
   triggerHeartRain();
 
-  // Phát nhạc nếu có
   const audio = document.getElementById("bg-music");
   const musicBtn = document.getElementById("music-toggle-btn");
   if (audio && config.audioSrc) {
@@ -893,13 +885,11 @@ function openInvitation() {
         musicBtn?.classList.add("visible", "playing");
       })
       .catch(() => {
-        // Trình duyệt chặn autoplay, vẫn hiện nút để user tự bấm
         musicBtn?.classList.add("visible");
         musicBtn?.classList.remove("playing");
       });
   }
 
-  // Đẩy thiệp lên chậm rãi, canh thời gian hoàn hảo với lúc lớp màn trắng mờ đi (khoảng 1.5s)
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
@@ -915,10 +905,8 @@ function replayInvitation() {
   els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
 
-  // Reset trạng thái nền trắng
   els.heartFireworksContainer?.classList.remove("flash-white");
 
-  // Dừng nhạc khi replay
   const audio = document.getElementById("bg-music");
   const musicBtn = document.getElementById("music-toggle-btn");
   if (audio) audio.pause();
@@ -931,7 +919,6 @@ function replayInvitation() {
   });
 }
 
-// Xử lý nút bật/tắt nhạc
 document
   .getElementById("music-toggle-btn")
   ?.addEventListener("click", function () {
@@ -1067,6 +1054,7 @@ async function initViewMode() {
     params.get("edit") === "1" ||
     window.location.protocol === "file:" ||
     !hasCard;
+
   if (!editMode) {
     document.body.classList.add("guest-view");
     els.editorShell?.setAttribute("hidden", "hidden");
@@ -1085,7 +1073,13 @@ async function initViewMode() {
       }
     } catch {
       showToast("Không tải được dữ liệu thiệp từ link.");
+    } finally {
+      setTimeout(() => {
+        els.preloader?.classList.add("is-hidden");
+      }, 500);
     }
+  } else {
+    els.preloader?.classList.add("is-hidden");
   }
 
   setShareStatus(
