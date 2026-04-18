@@ -78,6 +78,7 @@ const DEFAULT_CONFIG = {
     gallery: true,
     bank: true,
   },
+  audioSrc: "",
 };
 
 const galleryIds = [
@@ -648,6 +649,44 @@ function bindEditor() {
   bindImageUpload("coverUpload", (src) => {
     config.coverImage = src;
   });
+
+  // THÊM XỬ LÝ UPLOAD NHẠC
+  const audioInput = document.getElementById("audioUpload");
+  if (audioInput) {
+    audioInput.addEventListener("change", () => {
+      const file = audioInput.files[0];
+      if (!file) return;
+
+      // Giới hạn file 3MB để tránh đơ trình duyệt khi lưu LocalStorage
+      if (file.size > 3 * 1024 * 1024) {
+        showToast(
+          "File nhạc quá nặng. Vui lòng chọn file dưới 3MB để thiệp load nhanh nhé.",
+        );
+        audioInput.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        config.audioSrc = e.target.result;
+        saveConfig();
+        showToast("Đã tải nhạc nền thành công!");
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById("clearAudioBtn")?.addEventListener("click", () => {
+    config.audioSrc = "";
+    saveConfig();
+    showToast("Đã xóa nhạc nền.");
+    const audio = document.getElementById("bg-music");
+    if (audio) audio.pause();
+    document
+      .getElementById("music-toggle-btn")
+      ?.classList.remove("visible", "playing");
+  });
+
   bindImageUpload("galleryUpload1", (src) => {
     config.galleryImages[0] = src;
   });
@@ -769,83 +808,66 @@ function startPetals() {
 }
 
 /* =========================
-   OPENING / REVEAL & GIANT FIREWORKS
+   MUSIC & OPENING REVEAL
 ========================= */
-function triggerFireworks() {
+function triggerHeartRain() {
   if (!els.heartFireworksContainer) return;
-
-  // 1. Phủ ngay lớp màn trắng mượt mà
   els.heartFireworksContainer.classList.add("flash-white");
 
-  // 2. Kích hoạt tim đỏ khổng lồ
+  // 1. Kích hoạt tim đỏ khổng lồ ở giữa
   const heart = document.createElement("div");
   heart.className = "fw-heart animate";
   els.heartFireworksContainer.appendChild(heart);
 
-  // 3. Đúng nhịp tim nổ (700ms) tung 200 hạt pháo hoa bự & nhiều màu
+  // 2. Khi tim khổng lồ nổ (khoảng 800ms), tạo cơn mưa tim nhỏ rơi từ header
   setTimeout(() => {
-    // Bảng màu rực rỡ để nổi bật tuyệt đối trên nền trắng
-    const colors = [
-      "#e63946",
-      "#ff006e",
-      "#a200ff",
-      "#00e5ff",
-      "#3a86ff",
-      "#ffb703",
-      "#fb8500",
-      "#f0d28a",
-      "#1d3557",
-    ];
-    const particleCount = 200;
-
+    const particleCount = 45; // Số lượng tim rơi
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement("div");
-      p.className = "fw-particle";
+      p.className = "fw-falling-heart";
+      p.innerHTML = `<svg viewBox="0 0 24 24" fill="#8c1125"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
 
-      const angle = Math.random() * Math.PI * 2;
-      // Vận tốc siêu rộng để bay phủ cả màn hình
-      const velocity = 100 + Math.random() * 450;
-      const tx = Math.cos(angle) * velocity;
-      const ty = Math.sin(angle) * velocity;
+      // Random vị trí chiều ngang, kích thước tim và thời gian rơi
+      const startX = Math.random() * 100;
+      const size = Math.random() * 16 + 10; // Tim từ 10px đến 26px
+      const duration = Math.random() * 3000 + 3500; // Rơi chậm từ 3.5s - 6.5s
+      const delay = Math.random() * 1500; // Rơi lác đác không cùng lúc
 
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      p.style.color = color;
-      p.style.backgroundColor = color;
-
-      // Hạt to từ 6px đến 18px
-      const size = Math.random() * 12 + 6;
+      p.style.left = `${startX}%`;
       p.style.width = `${size}px`;
       p.style.height = `${size}px`;
+      p.style.opacity = "0.8";
 
       els.heartFireworksContainer.appendChild(p);
 
-      // Ty + 250px tạo trọng lực siêu thật (hạt rớt mạnh hơn khi đã bung)
+      // Animation rơi bằng Web Animations API cực mượt
       p.animate(
         [
-          { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+          { transform: `translateY(0) rotate(0deg) scale(1)`, opacity: 0.8 },
           {
-            transform: `translate(${tx}px, ${ty + 250}px) scale(0)`,
+            transform: `translateY(110vh) rotate(${Math.random() * 360}deg) scale(0.5)`,
             opacity: 0,
           },
         ],
         {
-          duration: 800 + Math.random() * 800, // Kéo dài từ 0.8s tới 1.6s
-          easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+          duration: duration,
+          delay: delay,
+          easing: "cubic-bezier(0.37, 0, 0.63, 1)", // Rơi gia tốc tự nhiên
           fill: "forwards",
         },
       );
 
-      setTimeout(() => p.remove(), 1600);
+      setTimeout(() => p.remove(), duration + delay + 100);
     }
-  }, 700);
+  }, 800);
 
-  // Dọn tim sau khi nổ xong
+  // Dọn dẹp tim khổng lồ
   setTimeout(() => heart.remove(), 1200);
 
-  // Mở dần rèm trắng để hiện thiệp sau đó
+  // 3. Xóa lớp nền trắng từ từ để lộ nội dung thiệp đang mờ mờ hiện ra
   setTimeout(() => {
     els.heartFireworksContainer.classList.remove("flash-white");
-  }, 1600);
+  }, 1400);
 }
 
 function revealSequential() {
@@ -855,22 +877,37 @@ function revealSequential() {
 }
 
 function openInvitation() {
-  // Ẩn lớp vỏ ngoài
   els.openingStage?.classList.add("is-opening");
 
-  // Trình diễn pháo hoa
-  triggerFireworks();
+  // Gọi hiệu ứng Mưa Tim
+  triggerHeartRain();
 
-  // Đẩy thiệp lên khi nền trắng chuẩn bị mờ đi
+  // Phát nhạc nếu có
+  const audio = document.getElementById("bg-music");
+  const musicBtn = document.getElementById("music-toggle-btn");
+  if (audio && config.audioSrc) {
+    audio.src = config.audioSrc;
+    audio
+      .play()
+      .then(() => {
+        musicBtn?.classList.add("visible", "playing");
+      })
+      .catch(() => {
+        // Trình duyệt chặn autoplay, vẫn hiện nút để user tự bấm
+        musicBtn?.classList.add("visible");
+        musicBtn?.classList.remove("playing");
+      });
+  }
+
+  // Đẩy thiệp lên chậm rãi, canh thời gian hoàn hảo với lúc lớp màn trắng mờ đi (khoảng 1.5s)
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
-  }, 1000);
+  }, 1500);
 
-  // Clean hoàn toàn vỏ sau đó
   setTimeout(() => {
     els.openingStage?.classList.add("is-opened");
-  }, 1800);
+  }, 3000);
 }
 
 function replayInvitation() {
@@ -881,12 +918,34 @@ function replayInvitation() {
   // Reset trạng thái nền trắng
   els.heartFireworksContainer?.classList.remove("flash-white");
 
+  // Dừng nhạc khi replay
+  const audio = document.getElementById("bg-music");
+  const musicBtn = document.getElementById("music-toggle-btn");
+  if (audio) audio.pause();
+  musicBtn?.classList.remove("visible", "playing");
+
   if (els.siteRoot) els.siteRoot.scrollTop = 0;
 
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     el.classList.remove("is-inview");
   });
 }
+
+// Xử lý nút bật/tắt nhạc
+document
+  .getElementById("music-toggle-btn")
+  ?.addEventListener("click", function () {
+    const audio = document.getElementById("bg-music");
+    if (!audio || !audio.src) return;
+
+    if (audio.paused) {
+      audio.play();
+      this.classList.add("playing");
+    } else {
+      audio.pause();
+      this.classList.remove("playing");
+    }
+  });
 
 /* =========================
    LIGHTBOX / QR

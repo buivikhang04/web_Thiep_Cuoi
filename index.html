@@ -218,6 +218,36 @@
               <input id="coverUpload" type="file" accept="image/*" />
             </div>
 
+            <hr
+              style="
+                border: 0;
+                border-top: 1px dashed rgba(140, 17, 37, 0.2);
+                margin: 10px 0;
+              "
+            />
+            <div class="field">
+              <label for="audioUpload"
+                >Nhạc nền (MP3 - Ưu tiên file dưới 2MB)</label
+              >
+              <div class="field-file-actions">
+                <input id="audioUpload" type="file" accept="audio/*" />
+                <button
+                  class="btn-mini-delete"
+                  type="button"
+                  id="clearAudioBtn"
+                >
+                  Xóa
+                </button>
+              </div>
+            </div>
+            <hr
+              style="
+                border: 0;
+                border-top: 1px dashed rgba(140, 17, 37, 0.2);
+                margin: 10px 0;
+              "
+            />
+
             <div class="field-row">
               <div class="field">
                 <label for="qrUpload">Ảnh QR Nhà Trai</label>
@@ -459,6 +489,25 @@
 
     <div class="preview-shell" id="preview-shell">
       <div class="preview-surface" id="preview-surface">
+        <audio id="bg-music" loop preload="auto"></audio>
+        <button
+          id="music-toggle-btn"
+          class="music-toggle-btn"
+          aria-label="Bật/tắt nhạc"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+
         <div id="heart-fireworks-container" class="heart-fw-container"></div>
         <div class="petals-layer" id="petals-layer"></div>
 
