@@ -78,7 +78,8 @@ const DEFAULT_CONFIG = {
     gallery: true,
     bank: true,
   },
-  audioSrc: "cuoi-thoi.mp3",
+  audioSrc:
+    "https://phlhfyqfmrvrcnmfkihc.supabase.co/storage/v1/object/public/wedding-assets/cuoi-thoi.mp3",
 };
 
 const galleryIds = [
@@ -649,41 +650,6 @@ function bindEditor() {
 
   bindImageUpload("coverUpload", (src) => {
     config.coverImage = src;
-  });
-
-  const audioInput = document.getElementById("audioUpload");
-  if (audioInput) {
-    audioInput.addEventListener("change", () => {
-      const file = audioInput.files[0];
-      if (!file) return;
-
-      if (file.size > 3 * 1024 * 1024) {
-        showToast(
-          "File nhạc quá nặng. Vui lòng chọn file dưới 3MB để thiệp load nhanh nhé.",
-        );
-        audioInput.value = "";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        config.audioSrc = e.target.result;
-        saveConfig();
-        showToast("Đã tải nhạc nền thành công!");
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  document.getElementById("clearAudioBtn")?.addEventListener("click", () => {
-    config.audioSrc = "";
-    saveConfig();
-    showToast("Đã xóa nhạc nền.");
-    const audio = document.getElementById("bg-music");
-    if (audio) audio.pause();
-    document
-      .getElementById("music-toggle-btn")
-      ?.classList.remove("visible", "playing");
   });
 
   bindImageUpload("galleryUpload1", (src) => {

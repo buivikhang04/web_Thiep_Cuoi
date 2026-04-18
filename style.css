@@ -1607,57 +1607,126 @@ body.mobile-preview-mode.guest-view .preview-surface {
 }
 
 /* =========================
-   MUSIC TOGGLE BUTTON
+   NEW MUSIC TOGGLE BUTTON (MÃ MỚI - ĐĨA ICON XOAY)
 ========================= */
 .music-toggle-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 50;
-  width: 44px;
-  height: 44px;
+
+  /* Thiết kế đĩa vinyl đen có rãnh */
+  width: 60px; /* To hơn chút để nhìn rõ nhãn trên mobile */
+  height: 60px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(140, 17, 37, 0.15);
-  color: var(--wine);
+  background-color: #0c0c0c; /* Màu đen đĩa vinyl */
+
+  /* Tạo các rãnh đĩa tinh tế bằng repeating-radial-gradient */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+
+  border: 2px solid #222;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 0 10px rgba(0, 0, 0, 0.6);
+
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(8px);
+
+  /* Hoạt ảnh xoay tròn - Áp dụng cho TOÀN BỘ CÁI ĐĨA */
+  transform-origin: center;
+
+  /* Logic hiển thị ban đầu */
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
   transition:
     opacity 0.5s ease,
-    transform 0.3s ease;
+    visibility 0.5s ease;
 }
+
+/* Hiển thị nút khi đã load xong data */
 .music-toggle-btn.visible {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
-.music-toggle-btn svg {
-  width: 20px;
-  height: 20px;
+
+/* Khi đang phát: XOAY TOÀN BỘ ĐĨA và ẩn gạch chéo */
+.music-toggle-btn.playing {
+  animation: spinDisk 5s linear infinite; /* Xoay liên tục, mượt mà */
 }
-.music-toggle-btn.playing svg {
-  animation: spinDisk 4s linear infinite;
+
+/* Khi nhạc tắt (mặc định): Ẩn nhãn đỏ và hiển thị gạch chéo */
+.music-toggle-btn:not(.playing) .vinyl-label {
+  opacity: 0;
 }
+
+/* Tạo cái nhãn tròn màu ĐỎ TƯƠI ở giữa */
+.vinyl-label {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background-color: #d01111; /* Màu ĐỎ TƯƠI mạnh mẽ như trong ảnh */
+
+  /* Định dạng chữ trắng lồng P&H */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: white; /* Chữ trắng lồng */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  /* Lỗ trục nhỏ ở tâm nhãn */
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+
+/* Tạo cái lỗ trục nhỏ bằng thẻ giả ::after của nhãn */
+.vinyl-label::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #000;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Tạo gạch chéo đỏ khi nhạc tắt (mặc định) */
 .music-toggle-btn::after {
   content: "";
   position: absolute;
-  width: 24px;
+  width: 30px;
   height: 2px;
-  background: var(--wine);
+  background-color: #d01111; /* Cùng màu nhãn đỏ */
   transform: rotate(45deg);
   opacity: 1;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
+  z-index: 2; /* Nằm trên cả nhãn */
 }
+
+/* Khi đang phát: Ẩn gạch chéo đỏ đi */
 .music-toggle-btn.playing::after {
   opacity: 0;
 }
+
+/* HOẠT ẢNH XOAY TRÒN CHO ĐĨA */
 @keyframes spinDisk {
-  100% {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
     transform: rotate(360deg);
   }
 }
