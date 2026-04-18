@@ -769,25 +769,42 @@ function startPetals() {
 }
 
 /* =========================
-   OPENING / REVEAL & FIREWORKS
+   OPENING / REVEAL & GIANT FIREWORKS
 ========================= */
 function triggerFireworks() {
   if (!els.heartFireworksContainer) return;
 
+  // 1. Phủ ngay lớp màn trắng mượt mà
+  els.heartFireworksContainer.classList.add("flash-white");
+
+  // 2. Kích hoạt tim đỏ khổng lồ
   const heart = document.createElement("div");
   heart.className = "fw-heart animate";
   els.heartFireworksContainer.appendChild(heart);
 
+  // 3. Đúng nhịp tim nổ (700ms) tung 200 hạt pháo hoa bự & nhiều màu
   setTimeout(() => {
-    const colors = ["#8c1125", "#b1263d", "#f0d28a", "#ffffff", "#e85a73"];
-    const particleCount = 70;
+    // Bảng màu rực rỡ để nổi bật tuyệt đối trên nền trắng
+    const colors = [
+      "#e63946",
+      "#ff006e",
+      "#a200ff",
+      "#00e5ff",
+      "#3a86ff",
+      "#ffb703",
+      "#fb8500",
+      "#f0d28a",
+      "#1d3557",
+    ];
+    const particleCount = 200;
 
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement("div");
       p.className = "fw-particle";
 
       const angle = Math.random() * Math.PI * 2;
-      const velocity = 80 + Math.random() * 220;
+      // Vận tốc siêu rộng để bay phủ cả màn hình
+      const velocity = 100 + Math.random() * 450;
       const tx = Math.cos(angle) * velocity;
       const ty = Math.sin(angle) * velocity;
 
@@ -795,22 +812,24 @@ function triggerFireworks() {
       p.style.color = color;
       p.style.backgroundColor = color;
 
-      const size = Math.random() * 5 + 3;
+      // Hạt to từ 6px đến 18px
+      const size = Math.random() * 12 + 6;
       p.style.width = `${size}px`;
       p.style.height = `${size}px`;
 
       els.heartFireworksContainer.appendChild(p);
 
+      // Ty + 250px tạo trọng lực siêu thật (hạt rớt mạnh hơn khi đã bung)
       p.animate(
         [
           { transform: `translate(0, 0) scale(1)`, opacity: 1 },
           {
-            transform: `translate(${tx}px, ${ty + 100}px) scale(0)`,
+            transform: `translate(${tx}px, ${ty + 250}px) scale(0)`,
             opacity: 0,
           },
         ],
         {
-          duration: 800 + Math.random() * 600,
+          duration: 800 + Math.random() * 800, // Kéo dài từ 0.8s tới 1.6s
           easing: "cubic-bezier(0.25, 1, 0.5, 1)",
           fill: "forwards",
         },
@@ -818,9 +837,15 @@ function triggerFireworks() {
 
       setTimeout(() => p.remove(), 1600);
     }
-  }, 600);
+  }, 700);
 
+  // Dọn tim sau khi nổ xong
   setTimeout(() => heart.remove(), 1200);
+
+  // Mở dần rèm trắng để hiện thiệp sau đó
+  setTimeout(() => {
+    els.heartFireworksContainer.classList.remove("flash-white");
+  }, 1600);
 }
 
 function revealSequential() {
@@ -830,24 +855,32 @@ function revealSequential() {
 }
 
 function openInvitation() {
+  // Ẩn lớp vỏ ngoài
   els.openingStage?.classList.add("is-opening");
 
+  // Trình diễn pháo hoa
   triggerFireworks();
 
+  // Đẩy thiệp lên khi nền trắng chuẩn bị mờ đi
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
-  }, 750);
+  }, 1000);
 
+  // Clean hoàn toàn vỏ sau đó
   setTimeout(() => {
     els.openingStage?.classList.add("is-opened");
-  }, 1300);
+  }, 1800);
 }
 
 function replayInvitation() {
   els.openingStage?.classList.remove("is-opened", "is-opening");
   els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
+
+  // Reset trạng thái nền trắng
+  els.heartFireworksContainer?.classList.remove("flash-white");
+
   if (els.siteRoot) els.siteRoot.scrollTop = 0;
 
   document.querySelectorAll("[data-reveal]").forEach((el) => {
