@@ -383,7 +383,7 @@ img {
     filter 1.2s ease;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 0; /* FIX KHOẢNG TRỐNG DƯỚI */
+  padding-bottom: 0;
 }
 .site-root.is-visible {
   opacity: 1;
@@ -983,7 +983,7 @@ img {
 }
 
 .footer {
-  margin: 0 34px 0; /* FIX KHOẢNG TRỐNG DƯỚI */
+  margin: 0 34px 0;
   padding: 22px 18px 26px;
   background: linear-gradient(180deg, var(--wine-dark), var(--wine));
   color: white;
@@ -1128,7 +1128,7 @@ img {
 }
 
 /* =========================
-   MODAL DUAL QR (NEW DESIGN)
+   MODAL DUAL QR 
 ========================= */
 .qr-modal {
   position: fixed;
@@ -1151,9 +1151,9 @@ img {
 .qr-card.dual-qr {
   width: 100%;
   max-width: 680px;
-  max-height: 90vh; /* FIX: CHỐNG TRÀN CHIỀU CAO */
-  display: flex; /* FIX: NGUYÊN KHỐI QR */
-  flex-direction: column; /* FIX: NGUYÊN KHỐI QR */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   background: #fffbf9;
   border-radius: 20px;
   padding: 0;
@@ -1200,7 +1200,7 @@ img {
   display: flex;
   gap: 20px;
   padding: 30px;
-  overflow-y: auto; /* FIX: CHO PHÉP CUỘN KHỐI THÂN NẾU DÀI */
+  overflow-y: auto;
 }
 .qr-person-card {
   flex: 1;
@@ -1211,6 +1211,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%; /* FIX ĐỀU NHAU */
 }
 .qr-role {
   color: var(--wine);
@@ -1260,6 +1261,7 @@ img {
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-top: auto; /* FIX CÂN BẰNG NÚT */
 }
 .btn-download-qr:hover {
   background: #ecd5d2;
@@ -1535,7 +1537,25 @@ body.mobile-preview-mode.guest-view .preview-surface {
     padding: 0 12px;
   }
 
-  /* FIX: POPUP QR NẰM NGANG TRÊN MOBILE */
+  /* FIX LIGHTBOX TO HƠN TRÊN MOBILE */
+  .lightbox-card {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 6px;
+  }
+  .lightbox-nav {
+    width: 44px;
+    height: 44px;
+    font-size: 32px;
+  }
+  .lightbox-image {
+    max-height: 68vh;
+  }
+  .lightbox-thumbs img {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* FIX POPUP QR NẰM NGANG TRÊN MOBILE */
   .qr-header-bar {
     padding: 14px;
   }
@@ -1556,6 +1576,7 @@ body.mobile-preview-mode.guest-view .preview-surface {
     height: 120px;
     padding: 8px;
     margin-bottom: 12px;
+    flex-shrink: 0; /* FIX CHỐNG BÓP MÉO ẢNH */
   }
   .qr-role {
     font-size: 12px;

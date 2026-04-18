@@ -23,7 +23,6 @@ const DEFAULT_QR =
 
 const STORAGE_KEY = "wedding-red-modern-v5";
 
-// ĐÃ SỬA: Đổi lại thông tin mặc định
 const DEFAULT_CONFIG = {
   groomName: "Phi Phàm",
   brideName: "Thị Hoa",
