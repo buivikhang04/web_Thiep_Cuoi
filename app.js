@@ -23,6 +23,9 @@ const DEFAULT_QR =
 
 const STORAGE_KEY = "wedding-red-modern-v5";
 
+const DEFAULT_AUDIO_SRC =
+  "https://phlhfyqfmrvrcnmfkihc.supabase.co/storage/v1/object/public/wedding-assets/cuoi-thoi.mp3";
+
 const DEFAULT_CONFIG = {
   groomName: "Phi Phàm",
   brideName: "Thị Hoa",
@@ -78,8 +81,7 @@ const DEFAULT_CONFIG = {
     gallery: true,
     bank: true,
   },
-  audioSrc:
-    "https://phlhfyqfmrvrcnmfkihc.supabase.co/storage/v1/object/public/wedding-assets/cuoi-thoi.mp3",
+  audioSrc: DEFAULT_AUDIO_SRC,
 };
 
 const galleryIds = [
@@ -145,18 +147,37 @@ function deepMerge(base, extra) {
   return output;
 }
 
+function normalizeAudioSrc(value) {
+  return typeof value === "string" && value.trim()
+    ? value.trim()
+    : DEFAULT_AUDIO_SRC;
+}
+
+function ensureAudioConfig() {
+  config.audioSrc = normalizeAudioSrc(config.audioSrc);
+}
+
 function loadConfig() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return cloneDeep(DEFAULT_CONFIG);
-    return deepMerge(DEFAULT_CONFIG, JSON.parse(raw));
+    if (!raw) {
+      const fresh = cloneDeep(DEFAULT_CONFIG);
+      fresh.audioSrc = normalizeAudioSrc(fresh.audioSrc);
+      return fresh;
+    }
+    const merged = deepMerge(DEFAULT_CONFIG, JSON.parse(raw));
+    merged.audioSrc = normalizeAudioSrc(merged.audioSrc);
+    return merged;
   } catch {
-    return cloneDeep(DEFAULT_CONFIG);
+    const fresh = cloneDeep(DEFAULT_CONFIG);
+    fresh.audioSrc = normalizeAudioSrc(fresh.audioSrc);
+    return fresh;
   }
 }
 
 function saveConfig(show = false) {
   try {
+    ensureAudioConfig();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
     if (show) showToast("Đã lưu cấu hình vào trình duyệt của bạn.");
   } catch {
@@ -218,6 +239,7 @@ function setLink(id, href, hiddenWhenEmpty = true) {
 function isMobileLayout() {
   return window.matchMedia("(max-width: 900px)").matches;
 }
+
 function setMobilePreviewMode(enabled) {
   document.body.classList.toggle("mobile-preview-mode", Boolean(enabled));
 }
@@ -251,6 +273,23 @@ async function copyText(text) {
   temp.select();
   document.execCommand("copy");
   temp.remove();
+}
+
+function updateMusicButtonState(isPlaying) {
+  const musicBtn = document.getElementById("music-toggle-btn");
+  if (!musicBtn) return;
+  musicBtn.classList.add("visible");
+  musicBtn.classList.toggle("playing", Boolean(isPlaying));
+}
+
+function syncAudioElement() {
+  const audio = document.getElementById("bg-music");
+  if (!audio) return;
+  ensureAudioConfig();
+  if (config.audioSrc && audio.src !== config.audioSrc) {
+    audio.src = config.audioSrc;
+    audio.load();
+  }
 }
 
 /* =========================
@@ -294,9 +333,13 @@ async function saveRemoteCard() {
   if (!canUseRemoteShare()) {
     throw new Error("Bạn chưa cấu hình Supabase trong window.WEDDING_REMOTE.");
   }
+
+  ensureAudioConfig();
+
   const remote = getRemoteConfig();
   const newSlug = createSlug();
   const newEditKey = createEditKey();
+
   const payload = {
     slug: newSlug,
     edit_key: newEditKey,
@@ -304,6 +347,7 @@ async function saveRemoteCard() {
     config: config,
     updated_at: new Date().toISOString(),
   };
+
   const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}`;
   const response = await fetch(url, {
     method: "POST",
@@ -315,14 +359,17 @@ async function saveRemoteCard() {
     },
     body: JSON.stringify(payload),
   });
+
   if (!response.ok) {
     const body = await response.text();
     throw new Error(body || "Không xuất được thiệp online.");
   }
+
   const rows = await response.json();
   const row = rows?.[0] || payload;
   const viewUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}`;
   const editUrl = `${window.location.origin}${window.location.pathname}?edit=1&card=${encodeURIComponent(row.slug)}&editKey=${encodeURIComponent(row.edit_key || newEditKey)}`;
+
   return {
     slug: row.slug,
     editKey: row.edit_key || newEditKey,
@@ -375,6 +422,7 @@ function syncGalleryDomImages() {
       el.hidden = true;
     }
   });
+
   document
     .querySelectorAll("#section-gallery .gallery-item")
     .forEach((item, index) => {
@@ -430,7 +478,8 @@ function updateDetailedDate() {
 }
 
 function applyConfig() {
-  setText("opening-initials", config.initials);
+  ensureAudioConfig();
+
   setText("gift-initials", config.initials);
   setText("opening-groom", config.groomName);
   setText("opening-bride", config.brideName);
@@ -469,6 +518,11 @@ function applyConfig() {
   setText("bank-note-preview", config.bankNote);
   setText("closing-text", config.closingText);
 
+  const vinylLabel = document.querySelector(".vinyl-label");
+  if (vinylLabel) {
+    vinylLabel.textContent = config.initials || "P&H";
+  }
+
   setImage("hero-image", config.coverImage);
   setImage("qr-image", config.qrImage || DEFAULT_QR);
   setImage("qr-image-bride", config.qrImageBride || DEFAULT_QR);
@@ -480,6 +534,8 @@ function applyConfig() {
   if (els.siteRoot) {
     els.siteRoot.dataset.countdownTarget = config.countdownTarget || "";
   }
+
+  syncAudioElement();
   updateCountdown();
   updateDetailedDate();
   updateSectionVisibility();
@@ -521,6 +577,7 @@ function populateInputs() {
     bankNumberBrideInput: config.bankNumberBride,
     bankNoteInput: config.bankNote,
   };
+
   Object.entries(values).forEach(([id, value]) => {
     const input = document.getElementById(id);
     if (input) input.value = value ?? "";
@@ -533,6 +590,7 @@ function populateInputs() {
     toggleGallery: config.toggles.gallery,
     toggleBank: config.toggles.bank,
   };
+
   Object.entries(toggles).forEach(([id, checked]) => {
     const input = document.getElementById(id);
     if (input) input.checked = Boolean(checked);
@@ -701,6 +759,7 @@ function bindEditor() {
     },
     { type: "image/png", quality: 0.92, maxSize: 1000 },
   );
+
   bindImageUpload(
     "qrUploadBride",
     (src) => {
@@ -713,6 +772,7 @@ function bindEditor() {
     replayInvitation();
     showToast("Đã đưa thiệp về trạng thái chờ mở.");
   });
+
   document
     .getElementById("resetBtn")
     ?.addEventListener("click", resetToDefault);
@@ -727,6 +787,7 @@ function updateCountdown() {
     els.siteRoot?.dataset.countdownTarget || "",
   ).getTime();
   if (!Number.isFinite(target)) return;
+
   const tick = () => {
     const diff = target - Date.now();
     const values =
@@ -738,17 +799,20 @@ function updateCountdown() {
             secs: Math.floor((diff / 1000) % 60),
           }
         : { days: 0, hours: 0, mins: 0, secs: 0 };
+
     const pairs = {
       "count-days": values.days,
       "count-hours": values.hours,
       "count-mins": values.mins,
       "count-secs": values.secs,
     };
+
     Object.entries(pairs).forEach(([id, value]) => {
       const el = document.getElementById(id);
       if (el) el.textContent = String(value).padStart(2, "0");
     });
   };
+
   tick();
   countdownTimer = setInterval(tick, 1000);
 }
@@ -762,7 +826,7 @@ function startPetals() {
   petalTimer = setInterval(() => {
     const petal = document.createElement("span");
     petal.className = "petal";
-    petal.style.left = Math.random() * 100 + "%";
+    petal.style.left = `${Math.random() * 100}%`;
     petal.style.setProperty("--drift-x", `${Math.random() * 120 - 60}px`);
     petal.style.animationDuration = `${4.8 + Math.random() * 3.6}s`;
     petal.style.width = `${10 + Math.random() * 10}px`;
@@ -785,7 +849,7 @@ function triggerHeartRain() {
 
   setTimeout(() => {
     const particleCount = 45;
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < particleCount; i += 1) {
       const p = document.createElement("div");
       p.className = "fw-falling-heart";
       p.innerHTML = `<svg viewBox="0 0 24 24" fill="#8c1125"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
@@ -804,15 +868,15 @@ function triggerHeartRain() {
 
       p.animate(
         [
-          { transform: `translateY(0) rotate(0deg) scale(1)`, opacity: 0.8 },
+          { transform: "translateY(0) rotate(0deg) scale(1)", opacity: 0.8 },
           {
             transform: `translateY(110vh) rotate(${Math.random() * 360}deg) scale(0.5)`,
             opacity: 0,
           },
         ],
         {
-          duration: duration,
-          delay: delay,
+          duration,
+          delay,
           easing: "cubic-bezier(0.37, 0, 0.63, 1)",
           fill: "forwards",
         },
@@ -841,17 +905,19 @@ function openInvitation() {
   triggerHeartRain();
 
   const audio = document.getElementById("bg-music");
-  const musicBtn = document.getElementById("music-toggle-btn");
+  syncAudioElement();
+
   if (audio && config.audioSrc) {
-    audio.src = config.audioSrc;
+    updateMusicButtonState(false);
+
+    audio.currentTime = 0;
     audio
       .play()
       .then(() => {
-        musicBtn?.classList.add("visible", "playing");
+        updateMusicButtonState(true);
       })
       .catch(() => {
-        musicBtn?.classList.add("visible");
-        musicBtn?.classList.remove("playing");
+        updateMusicButtonState(false);
       });
   }
 
@@ -873,8 +939,12 @@ function replayInvitation() {
   els.heartFireworksContainer?.classList.remove("flash-white");
 
   const audio = document.getElementById("bg-music");
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
   const musicBtn = document.getElementById("music-toggle-btn");
-  if (audio) audio.pause();
   musicBtn?.classList.remove("visible", "playing");
 
   if (els.siteRoot) els.siteRoot.scrollTop = 0;
@@ -888,14 +958,28 @@ document
   .getElementById("music-toggle-btn")
   ?.addEventListener("click", function () {
     const audio = document.getElementById("bg-music");
-    if (!audio || !audio.src) return;
+    if (!audio) return;
+
+    syncAudioElement();
+
+    if (!audio.src) {
+      showToast("Chưa có file nhạc.");
+      return;
+    }
 
     if (audio.paused) {
-      audio.play();
-      this.classList.add("playing");
+      audio
+        .play()
+        .then(() => {
+          updateMusicButtonState(true);
+        })
+        .catch(() => {
+          updateMusicButtonState(false);
+          showToast("Trình duyệt đang chặn phát nhạc.");
+        });
     } else {
       audio.pause();
-      this.classList.remove("playing");
+      updateMusicButtonState(false);
     }
   });
 
@@ -915,7 +999,7 @@ function renderLightboxThumbs() {
   sources.forEach((src, index) => {
     const thumb = document.createElement("img");
     thumb.src = src;
-    thumb.alt = "Ảnh thu nhỏ " + (index + 1);
+    thumb.alt = `Ảnh thu nhỏ ${index + 1}`;
     if (index === currentLightboxIndex) {
       thumb.classList.add("active");
     }
@@ -946,6 +1030,7 @@ function openLightbox(index) {
   els.lightbox?.classList.add("show");
   updateLightbox();
 }
+
 function closeLightbox() {
   els.lightbox?.classList.remove("show");
 }
@@ -954,26 +1039,31 @@ function bindPreviewActions() {
   document.querySelectorAll("[data-open-invitation]").forEach((btn) => {
     btn.addEventListener("click", openInvitation);
   });
+
   document.querySelectorAll("[data-gallery-index]").forEach((item) => {
     item.addEventListener("click", () => {
       openLightbox(Number(item.dataset.galleryIndex || 0));
     });
   });
+
   document
     .querySelector("[data-close-lightbox]")
     ?.addEventListener("click", closeLightbox);
+
   document
     .querySelector("[data-lightbox-prev]")
     ?.addEventListener("click", () => {
       currentLightboxIndex -= 1;
       updateLightbox();
     });
+
   document
     .querySelector("[data-lightbox-next]")
     ?.addEventListener("click", () => {
       currentLightboxIndex += 1;
       updateLightbox();
     });
+
   els.lightbox?.addEventListener("click", (event) => {
     if (event.target === els.lightbox) closeLightbox();
   });
@@ -981,9 +1071,11 @@ function bindPreviewActions() {
   document.querySelectorAll("[data-open-qr]").forEach((btn) => {
     btn.addEventListener("click", () => els.qrModal?.classList.add("show"));
   });
+
   document.querySelector("[data-close-qr]")?.addEventListener("click", () => {
     els.qrModal?.classList.remove("show");
   });
+
   els.qrModal?.addEventListener("click", (event) => {
     if (event.target === els.qrModal) {
       els.qrModal.classList.remove("show");
@@ -1033,6 +1125,7 @@ async function initViewMode() {
       const row = await fetchRemoteCardBySlug(params.get("card"));
       if (row?.config) {
         config = deepMerge(DEFAULT_CONFIG, row.config);
+        config.audioSrc = normalizeAudioSrc(config.audioSrc);
         populateInputs();
         applyConfig();
       }
@@ -1044,6 +1137,7 @@ async function initViewMode() {
       }, 500);
     }
   } else {
+    ensureAudioConfig();
     els.preloader?.classList.add("is-hidden");
   }
 
@@ -1079,17 +1173,21 @@ function bindMobileAndShareActions() {
       showToast("Ở máy tính bạn xem preview ngay bên phải.");
     }
   });
+
   document.getElementById("mobilePreviewBtn")?.addEventListener("click", () => {
     setMobilePreviewMode(true);
     replayInvitation();
   });
+
   const backToEdit = () => setMobilePreviewMode(false);
+
   document
     .getElementById("mobileEditBtn")
     ?.addEventListener("click", backToEdit);
   document
     .getElementById("mobileBackToEditBtn")
     ?.addEventListener("click", backToEdit);
+
   document
     .getElementById("shareLinkBtn")
     ?.addEventListener("click", handleCopyShareLink);
@@ -1099,6 +1197,7 @@ function bindMobileAndShareActions() {
   document
     .getElementById("mobileCopyLinkBtnTop")
     ?.addEventListener("click", handleCopyShareLink);
+
   document.querySelectorAll(".panel-card").forEach((card, index) => {
     if (index < 6) {
       card.classList.add("is-collapsible");
@@ -1112,6 +1211,7 @@ function bindMobileAndShareActions() {
       }
     }
   });
+
   window.addEventListener("resize", () => {
     if (!isMobileLayout()) {
       setMobilePreviewMode(false);
@@ -1141,6 +1241,7 @@ window.addEventListener("pageshow", () => {
 ========================= */
 function resetToDefault() {
   config = cloneDeep(DEFAULT_CONFIG);
+  ensureAudioConfig();
   populateInputs();
   applyConfig();
   saveConfig();

@@ -22,7 +22,7 @@
       };
     </script>
 
-    <link rel="stylesheet" href="style.css?v=2" />
+    <link rel="stylesheet" href="style.css?v=3" />
   </head>
   <body>
     <div id="preloader" class="preloader">
@@ -283,11 +283,8 @@
               <div class="field">
                 <label for="galleryUpload3">Ảnh album 3</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload3"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload3" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="2"
@@ -299,11 +296,8 @@
               <div class="field">
                 <label for="galleryUpload4">Ảnh album 4</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload4"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload4" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="3"
@@ -313,15 +307,13 @@
                 </div>
               </div>
             </div>
+
             <div class="field-row">
               <div class="field">
                 <label for="galleryUpload5">Ảnh album 5</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload5"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload5" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="4"
@@ -333,11 +325,8 @@
               <div class="field">
                 <label for="galleryUpload6">Ảnh album 6</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload6"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload6" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="5"
@@ -347,15 +336,13 @@
                 </div>
               </div>
             </div>
+
             <div class="field-row">
               <div class="field">
                 <label for="galleryUpload7">Ảnh album 7</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload7"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload7" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="6"
@@ -367,11 +354,8 @@
               <div class="field">
                 <label for="galleryUpload8">Ảnh album 8</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload8"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload8" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="7"
@@ -381,15 +365,13 @@
                 </div>
               </div>
             </div>
+
             <div class="field-row">
               <div class="field">
                 <label for="galleryUpload9">Ảnh album 9</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload9"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload9" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="8"
@@ -401,11 +383,8 @@
               <div class="field">
                 <label for="galleryUpload10">Ảnh album 10</label>
                 <div class="field-file-actions">
-                  <input
-                    id="galleryUpload10"
-                    type="file"
-                    accept="image/*"
-                  /><button
+                  <input id="galleryUpload10" type="file" accept="image/*" />
+                  <button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="9"
@@ -471,7 +450,7 @@
             </button>
             <div class="share-status" id="shareStatus">
               Đã sẵn sàng Xuất Thiệp online. Bạn có thể bấm
-              <strong> Xuất Thiệp</strong>.
+              <strong>Xuất Thiệp</strong>.
             </div>
           </div>
         </section>
@@ -480,7 +459,16 @@
 
     <div class="preview-shell" id="preview-shell">
       <div class="preview-surface" id="preview-surface">
-        <audio id="bg-music" loop preload="auto"></audio>
+        <audio id="bg-music" loop preload="auto" playsinline></audio>
+
+        <button
+          id="music-toggle-btn"
+          class="music-toggle-btn"
+          aria-label="Bật hoặc tắt nhạc"
+          type="button"
+        >
+          <span class="vinyl-label">P&H</span>
+        </button>
 
         <div id="heart-fireworks-container" class="heart-fw-container"></div>
         <div class="petals-layer" id="petals-layer"></div>
@@ -687,7 +675,7 @@
 
           <section class="section reveal" id="section-details" data-reveal>
             <div class="section-card wedding-info-card">
-              <div class="wedding-info-head">Thông-tin lễ cưới</div>
+              <div class="wedding-info-head">Thông tin lễ cưới</div>
 
               <div class="family-grid">
                 <div class="family-col">
