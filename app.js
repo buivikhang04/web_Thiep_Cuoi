@@ -4,24 +4,11 @@ const DEFAULT_QR =
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
       <rect width="320" height="320" rx="28" fill="#ffffff"/>
       <rect x="26" y="26" width="268" height="268" rx="18" fill="#faf5f3" stroke="#8c1125" stroke-width="10"/>
-      <rect x="52" y="52" width="70" height="70" rx="10" fill="#111"/>
-      <rect x="70" y="70" width="34" height="34" rx="6" fill="#fff"/>
-      <rect x="198" y="52" width="70" height="70" rx="10" fill="#111"/>
-      <rect x="216" y="70" width="34" height="34" rx="6" fill="#fff"/>
-      <rect x="52" y="198" width="70" height="70" rx="10" fill="#111"/>
-      <rect x="70" y="216" width="34" height="34" rx="6" fill="#fff"/>
-      <rect x="162" y="164" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="190" y="164" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="218" y="164" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="162" y="192" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="218" y="192" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="162" y="220" width="18" height="18" rx="4" fill="#111"/>
-      <rect x="190" y="220" width="46" height="18" rx="4" fill="#111"/>
-      <text x="160" y="292" font-family="Arial" font-size="22" text-anchor="middle" fill="#8c1125">QR chuyển khoản</text>
+      <text x="160" y="160" font-family="Arial" font-size="22" text-anchor="middle" fill="#8c1125">QR Demo</text>
     </svg>
   `);
 
-const STORAGE_KEY = "wedding-red-modern-v5";
+const STORAGE_KEY = "wedding-red-modern-v6";
 
 const DEFAULT_CONFIG = {
   groomName: "Đức Anh",
@@ -36,16 +23,16 @@ const DEFAULT_CONFIG = {
   countdownTarget: "2026-05-10T18:00",
   introTitle: "Trân trọng kính mời",
   introText:
-    "Đến dự buổi tiệc chung vui cùng gia đình chúng tôi. Sự hiện diện của bạn là món quà quý giá nhất cho hành trình yêu thương này.",
+    "Đến dự buổi tiệc chung vui cùng gia đình chúng tôi. Sự hiện diện của bạn là món quà quý giá nhất.",
   venueName: "Queen Bee Luxury",
   venueAddress: "29 Láng Hạ, Phường Láng Hạ, Hà Nội",
   mapLink: "https://maps.google.com/?q=Queen+Bee+Luxury+Lang+Ha+Ha+Noi",
   familyLeftLine1: "Vũ Văn Hiệp",
   familyLeftLine2: "Nguyễn Thị Ánh",
-  familyLeftAddress: "Số 9, Ngõ 102 Trường Chinh, Đống Đa, Hà Nội",
+  familyLeftAddress: "Hà Nội",
   familyRightLine1: "Đỗ Văn Tuyên",
   familyRightLine2: "Lê Thị Vân",
-  familyRightAddress: "Số 32, Phố Đội Cấn, Ba Đình, Hà Nội",
+  familyRightAddress: "Hà Nội",
   lunarDate: "(Nhằm ngày 24/03 năm Bính Ngọ)",
   bankName: "Vietcombank",
   bankOwner: "VU DUC ANH",
@@ -53,22 +40,12 @@ const DEFAULT_CONFIG = {
   bankNameBride: "VietinBank",
   bankOwnerBride: "DO THI THANH MAI",
   bankNumberBride: "0987654321",
-  bankNote:
-    "Quét mã QR hoặc chuyển khoản trực tiếp để gửi lời chúc đến tụi mình.",
+  bankNote: "Quét mã QR hoặc chuyển khoản trực tiếp.",
+  musicLink:
+    "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3", // Demo nhạc nhẹ
   coverImage:
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
-  galleryImages: [
-    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21d?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
-  ],
+  galleryImages: [],
   qrImage: DEFAULT_QR,
   qrImageBride: DEFAULT_QR,
   toggles: {
@@ -102,10 +79,11 @@ const els = {
   lightbox: document.getElementById("lightbox"),
   lightboxImage: document.getElementById("lightbox-image"),
   lightboxThumbs: document.getElementById("lightbox-thumbs"),
-  lightboxCounter: document.getElementById("lightbox-counter"),
   qrModal: document.getElementById("qr-modal"),
   shareStatus: document.getElementById("shareStatus"),
   heartFireworksContainer: document.getElementById("heart-fireworks-container"),
+  bgMusic: document.getElementById("bg-music"),
+  musicToggle: document.getElementById("music-toggle"),
 };
 
 let config = loadConfig();
@@ -114,318 +92,96 @@ let petalTimer = null;
 let currentLightboxIndex = 0;
 
 /* =========================
-   HELPERS
+   HELPERS & LOCAL STORAGE
 ========================= */
 function cloneDeep(value) {
   return JSON.parse(JSON.stringify(value));
 }
-
 function deepMerge(base, extra) {
   const output = cloneDeep(base);
   if (!extra || typeof extra !== "object") return output;
   Object.keys(extra).forEach((key) => {
-    const baseValue = output[key];
-    const extraValue = extra[key];
     if (
-      baseValue &&
-      typeof baseValue === "object" &&
-      !Array.isArray(baseValue) &&
-      extraValue &&
-      typeof extraValue === "object" &&
-      !Array.isArray(extraValue)
+      output[key] &&
+      typeof output[key] === "object" &&
+      !Array.isArray(output[key]) &&
+      extra[key] &&
+      typeof extra[key] === "object" &&
+      !Array.isArray(extra[key])
     ) {
-      output[key] = deepMerge(baseValue, extraValue);
+      output[key] = deepMerge(output[key], extra[key]);
     } else {
-      output[key] = extraValue;
+      output[key] = extra[key];
     }
   });
   return output;
 }
-
 function loadConfig() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return cloneDeep(DEFAULT_CONFIG);
-    return deepMerge(DEFAULT_CONFIG, JSON.parse(raw));
+    return raw
+      ? deepMerge(DEFAULT_CONFIG, JSON.parse(raw))
+      : cloneDeep(DEFAULT_CONFIG);
   } catch {
     return cloneDeep(DEFAULT_CONFIG);
   }
 }
-
-function saveConfig(show = false) {
+function saveConfig() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-    if (show) showToast("Đã lưu cấu hình vào trình duyệt của bạn.");
-  } catch {
-    showToast("Không lưu được localStorage.");
-  }
+  } catch (e) {}
 }
-
 function showToast(message) {
-  if (!els.toast) return;
   els.toast.textContent = message;
   els.toast.classList.add("show");
   clearTimeout(showToast._timer);
-  showToast._timer = setTimeout(() => {
-    els.toast.classList.remove("show");
-  }, 2400);
+  showToast._timer = setTimeout(() => els.toast.classList.remove("show"), 2400);
 }
-
 window.downloadQR = function (imageId, filename) {
   const img = document.getElementById(imageId);
-  if (!img || !img.src) {
-    showToast("Không tìm thấy mã QR để tải.");
-    return;
-  }
+  if (!img || !img.src) return;
   const link = document.createElement("a");
   link.href = img.src;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link);
-  showToast("Đang tải mã QR...");
+  link.remove();
 };
-
-function setShareStatus(message, ready = false) {
-  if (!els.shareStatus) return;
-  els.shareStatus.innerHTML = message;
-  els.shareStatus.style.color = ready ? "var(--wine)" : "var(--muted)";
-}
-
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value ?? "";
 }
-
 function setImage(id, src) {
   const el = document.getElementById(id);
   if (el && src) el.src = src;
 }
 
-function setLink(id, href, hiddenWhenEmpty = true) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const valid = typeof href === "string" && href.trim();
-  el.href = valid ? href : "#";
-  if (hiddenWhenEmpty) {
-    el.classList.toggle("is-hidden", !valid);
+/* =========================
+   MUSIC LOGIC
+========================= */
+function setupMusic() {
+  if (els.bgMusic) {
+    els.bgMusic.src = config.musicLink || "";
+    els.bgMusic.load();
   }
 }
 
-function isMobileLayout() {
-  return window.matchMedia("(max-width: 900px)").matches;
-}
-function setMobilePreviewMode(enabled) {
-  document.body.classList.toggle("mobile-preview-mode", Boolean(enabled));
+function toggleMusic() {
+  if (!els.bgMusic || !els.bgMusic.src) return;
+  if (els.bgMusic.paused) {
+    els.bgMusic.play();
+    els.musicToggle.classList.add("playing");
+  } else {
+    els.bgMusic.pause();
+    els.musicToggle.classList.remove("playing");
+  }
 }
 
-function createSlug(length = 10) {
-  const chars = "abcdefghjkmnpqrstuvwxyz23456789";
-  let out = "";
-  for (let i = 0; i < length; i += 1) {
-    out += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return out;
-}
-
-function createEditKey(length = 18) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-  let out = "";
-  for (let i = 0; i < length; i += 1) {
-    out += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return out;
-}
-
-async function copyText(text) {
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
-    return;
-  }
-  const temp = document.createElement("textarea");
-  temp.value = text;
-  document.body.appendChild(temp);
-  temp.select();
-  document.execCommand("copy");
-  temp.remove();
-}
+els.musicToggle?.addEventListener("click", toggleMusic);
 
 /* =========================
-   REMOTE SHARE / SUPABASE
+   CONFIG BINDING
 ========================= */
-function getRemoteConfig() {
-  const remote = window.WEDDING_REMOTE || {};
-  return {
-    supabaseUrl: String(remote.supabaseUrl || "")
-      .trim()
-      .replace(/\/$/, ""),
-    supabasePublishableKey: String(remote.supabasePublishableKey || "").trim(),
-    tableName: String(remote.tableName || "wedding_cards").trim(),
-  };
-}
-
-function canUseRemoteShare() {
-  const remote = getRemoteConfig();
-  return Boolean(
-    remote.supabaseUrl && remote.supabasePublishableKey && remote.tableName,
-  );
-}
-
-async function fetchRemoteCardBySlug(slug) {
-  const remote = getRemoteConfig();
-  const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}?slug=eq.${encodeURIComponent(slug)}&select=*`;
-  const response = await fetch(url, {
-    headers: {
-      apikey: remote.supabasePublishableKey,
-      Authorization: `Bearer ${remote.supabasePublishableKey}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Không đọc được dữ liệu thiệp online.");
-  }
-  const rows = await response.json();
-  return rows?.[0] || null;
-}
-
-async function saveRemoteCard() {
-  if (!canUseRemoteShare()) {
-    throw new Error("Bạn chưa cấu hình Supabase trong window.WEDDING_REMOTE.");
-  }
-  const remote = getRemoteConfig();
-  const newSlug = createSlug();
-  const newEditKey = createEditKey();
-  const payload = {
-    slug: newSlug,
-    edit_key: newEditKey,
-    title: `${config.groomName} & ${config.brideName}`,
-    config: config,
-    updated_at: new Date().toISOString(),
-  };
-  const url = `${remote.supabaseUrl}/rest/v1/${remote.tableName}`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: remote.supabasePublishableKey,
-      Authorization: `Bearer ${remote.supabasePublishableKey}`,
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(body || "Không xuất được thiệp online.");
-  }
-  const rows = await response.json();
-  const row = rows?.[0] || payload;
-  const viewUrl = `${window.location.origin}${window.location.pathname}?card=${encodeURIComponent(row.slug)}`;
-  const editUrl = `${window.location.origin}${window.location.pathname}?edit=1&card=${encodeURIComponent(row.slug)}&editKey=${encodeURIComponent(row.edit_key || newEditKey)}`;
-  return {
-    slug: row.slug,
-    editKey: row.edit_key || newEditKey,
-    viewUrl,
-    editUrl,
-  };
-}
-
-async function handleCopyShareLink() {
-  try {
-    if (!canUseRemoteShare()) {
-      showToast("Chưa cấu hình Supabase nên chưa xuất thiệp online được.");
-      return;
-    }
-    setShareStatus("Đang xuất thiệp online...");
-    const result = await saveRemoteCard();
-    await copyText(result.viewUrl);
-    setShareStatus(
-      "Đã xuất xong: <strong>link xem thiệp mới</strong> đã được sao chép.",
-      true,
-    );
-    showToast("Đã xuất thiệp online và sao chép link xem.");
-    history.replaceState({}, "", result.editUrl);
-  } catch (error) {
-    setShareStatus("Xuất thiệp thất bại. Kiểm tra lại cấu hình Supabase.");
-    showToast(error.message || "Không thể xuất thiệp.");
-  }
-}
-
-/* =========================
-   CONFIG -> DOM
-========================= */
-function getCompactGalleryImages() {
-  return (config.galleryImages || []).filter(
-    (src) => typeof src === "string" && src.trim(),
-  );
-}
-
-function syncGalleryDomImages() {
-  const compact = getCompactGalleryImages();
-  galleryIds.forEach((id, index) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const src = compact[index] || "";
-    if (src) {
-      el.src = src;
-      el.hidden = false;
-    } else {
-      el.removeAttribute("src");
-      el.hidden = true;
-    }
-  });
-  document
-    .querySelectorAll("#section-gallery .gallery-item")
-    .forEach((item, index) => {
-      item.hidden = !compact[index];
-      item.dataset.galleryIndex = String(index);
-      item.classList.toggle("more", index === 3 && compact.length > 4);
-    });
-}
-
-function updateGalleryMoreLabel() {
-  const more = document.querySelector(".gallery-item.more .gallery-more-count");
-  const moreItem = document.querySelector(".gallery-item.more");
-  if (!more || !moreItem) return;
-  const total = getCompactGalleryImages().length;
-  const extra = Math.max(0, total - 4);
-  more.textContent = extra > 0 ? "Xem thêm" : "";
-  more.hidden = extra <= 0;
-  moreItem.hidden = total < 4;
-}
-
-function updateSectionVisibility() {
-  const map = {
-    intro: "section-intro",
-    details: "section-details",
-    countdown: "section-countdown",
-    gallery: "section-gallery",
-    bank: "section-bank",
-  };
-  Object.entries(map).forEach(([key, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.hidden = !config.toggles[key];
-  });
-}
-
-function updateDetailedDate() {
-  const raw = config.countdownTarget || "";
-  const date = raw ? new Date(raw) : null;
-  if (date && Number.isFinite(date.getTime())) {
-    const weekdays = [
-      "Chủ nhật",
-      "Thứ hai",
-      "Thứ ba",
-      "Thứ tư",
-      "Thứ năm",
-      "Thứ sáu",
-      "Thứ bảy",
-    ];
-    setText("detail-weekday", weekdays[date.getDay()] || "");
-    setText("detail-day", String(date.getDate()).padStart(2, "0"));
-    setText("detail-month", String(date.getMonth() + 1).padStart(2, "0"));
-    setText("detail-year", String(date.getFullYear()));
-  }
-}
-
 function applyConfig() {
   setText("opening-initials", config.initials);
   setText("gift-initials", config.initials);
@@ -439,20 +195,6 @@ function applyConfig() {
   setText("hero-date", config.weddingDateText);
   setText("hero-time", config.weddingTimeText);
   setText("event-time", config.weddingTimeText);
-  setText("quote-top", config.quoteTop);
-  setText("quote-main", config.quoteMain);
-  setText("quote-bottom", config.quoteBottom);
-  setText("intro-title", config.introTitle);
-  setText("intro-text", config.introText);
-  setText("venue-name", config.venueName);
-  setText("venue-address", config.venueAddress);
-  setText("family-left-line1", config.familyLeftLine1);
-  setText("family-left-line2", config.familyLeftLine2);
-  setText("family-left-address", config.familyLeftAddress);
-  setText("family-right-line1", config.familyRightLine1);
-  setText("family-right-line2", config.familyRightLine2);
-  setText("family-right-address", config.familyRightAddress);
-  setText("detail-lunar", config.lunarDate);
 
   setText("bank-groom-name", config.groomName);
   setText("bank-bride-name", config.brideName);
@@ -463,389 +205,165 @@ function applyConfig() {
   setText("bank-owner-bride", config.bankOwnerBride);
   setText("bank-number-bride", config.bankNumberBride);
 
-  setText("bank-note-preview", config.bankNote);
-  setText("closing-text", config.closingText);
-
   setImage("hero-image", config.coverImage);
   setImage("qr-image", config.qrImage || DEFAULT_QR);
   setImage("qr-image-bride", config.qrImageBride || DEFAULT_QR);
 
-  syncGalleryDomImages();
-  updateGalleryMoreLabel();
-  setLink("map-button", config.mapLink, true);
-
-  if (els.siteRoot) {
-    els.siteRoot.dataset.countdownTarget = config.countdownTarget || "";
-  }
-  updateCountdown();
-  updateDetailedDate();
-  updateSectionVisibility();
-  renderLightboxThumbs();
+  setupMusic();
 }
 
-/* =========================
-   INPUTS / EDITOR
-========================= */
 function populateInputs() {
-  const values = {
-    groomNameInput: config.groomName,
-    brideNameInput: config.brideName,
-    initialsInput: config.initials,
-    closingTextInput: config.closingText,
-    quoteTopInput: config.quoteTop,
-    quoteMainInput: config.quoteMain,
-    quoteBottomInput: config.quoteBottom,
-    dateTextInput: config.weddingDateText,
-    timeTextInput: config.weddingTimeText,
-    countdownInput: config.countdownTarget,
-    introTitleInput: config.introTitle,
-    introTextInput: config.introText,
-    venueNameInput: config.venueName,
-    venueAddressInput: config.venueAddress,
-    mapLinkInput: config.mapLink,
-    familyLeftLine1Input: config.familyLeftLine1,
-    familyLeftLine2Input: config.familyLeftLine2,
-    familyLeftAddressInput: config.familyLeftAddress,
-    familyRightLine1Input: config.familyRightLine1,
-    familyRightLine2Input: config.familyRightLine2,
-    familyRightAddressInput: config.familyRightAddress,
-    lunarDateInput: config.lunarDate,
-    bankNameInput: config.bankName,
-    bankOwnerInput: config.bankOwner,
-    bankNumberInput: config.bankNumber,
-    bankNameBrideInput: config.bankNameBride,
-    bankOwnerBrideInput: config.bankOwnerBride,
-    bankNumberBrideInput: config.bankNumberBride,
-    bankNoteInput: config.bankNote,
-  };
-  Object.entries(values).forEach(([id, value]) => {
-    const input = document.getElementById(id);
-    if (input) input.value = value ?? "";
-  });
-
-  const toggles = {
-    toggleIntro: config.toggles.intro,
-    toggleDetails: config.toggles.details,
-    toggleCountdown: config.toggles.countdown,
-    toggleGallery: config.toggles.gallery,
-    toggleBank: config.toggles.bank,
-  };
-  Object.entries(toggles).forEach(([id, checked]) => {
-    const input = document.getElementById(id);
-    if (input) input.checked = Boolean(checked);
+  const inputs = [
+    "groomNameInput",
+    "brideNameInput",
+    "initialsInput",
+    "closingTextInput",
+    "quoteTopInput",
+    "quoteMainInput",
+    "quoteBottomInput",
+    "dateTextInput",
+    "timeTextInput",
+    "countdownInput",
+    "introTitleInput",
+    "introTextInput",
+    "venueNameInput",
+    "venueAddressInput",
+    "mapLinkInput",
+    "familyLeftLine1Input",
+    "familyLeftLine2Input",
+    "familyLeftAddressInput",
+    "familyRightLine1Input",
+    "familyRightLine2Input",
+    "familyRightAddressInput",
+    "lunarDateInput",
+    "bankNameInput",
+    "bankOwnerInput",
+    "bankNumberInput",
+    "bankNameBrideInput",
+    "bankOwnerBrideInput",
+    "bankNumberBrideInput",
+    "bankNoteInput",
+    "musicLinkInput",
+  ];
+  inputs.forEach((id) => {
+    const el = document.getElementById(id);
+    const key = id.replace("Input", "");
+    if (el) el.value = config[key] ?? "";
   });
 }
 
-function bindTextInput(id, key, nested) {
+function bindTextInput(id, key) {
   const input = document.getElementById(id);
-  if (!input) return;
-  input.addEventListener("input", () => {
-    if (nested) {
-      config[nested][key] = input.value;
-    } else {
+  if (input)
+    input.addEventListener("input", () => {
       config[key] = input.value;
-    }
-    applyConfig();
-    saveConfig();
-  });
-}
-
-function bindToggle(id, key) {
-  const input = document.getElementById(id);
-  if (!input) return;
-  input.addEventListener("change", () => {
-    config.toggles[key] = input.checked;
-    applyConfig();
-    saveConfig();
-  });
-}
-
-async function fileToDataUrl(file, options = {}) {
-  const type =
-    options.type || (file.type === "image/png" ? "image/png" : "image/jpeg");
-  const quality = options.quality ?? 0.86;
-  const maxSize = options.maxSize ?? 1600;
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = reject;
-      img.onload = () => {
-        const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
-        const width = Math.max(1, Math.round(img.width * ratio));
-        const height = Math.max(1, Math.round(img.height * ratio));
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL(type, quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function bindImageUpload(inputId, updater, options = {}) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  input.addEventListener("change", async () => {
-    const file = input.files && input.files[0];
-    if (!file) return;
-    try {
-      const dataUrl = await fileToDataUrl(file, options);
-      updater(dataUrl);
       applyConfig();
       saveConfig();
-      showToast("Ảnh đã được cập nhật.");
-    } catch {
-      showToast("Đọc ảnh thất bại. Bạn thử lại giúp mình nhé.");
-    } finally {
-      input.value = "";
-    }
-  });
+    });
 }
 
 function bindEditor() {
-  bindTextInput("groomNameInput", "groomName");
-  bindTextInput("brideNameInput", "brideName");
-  bindTextInput("initialsInput", "initials");
-  bindTextInput("closingTextInput", "closingText");
-  bindTextInput("quoteTopInput", "quoteTop");
-  bindTextInput("quoteMainInput", "quoteMain");
-  bindTextInput("quoteBottomInput", "quoteBottom");
-  bindTextInput("dateTextInput", "weddingDateText");
-  bindTextInput("timeTextInput", "weddingTimeText");
-  bindTextInput("countdownInput", "countdownTarget");
-  bindTextInput("introTitleInput", "introTitle");
-  bindTextInput("introTextInput", "introText");
-  bindTextInput("venueNameInput", "venueName");
-  bindTextInput("venueAddressInput", "venueAddress");
-  bindTextInput("mapLinkInput", "mapLink");
-  bindTextInput("familyLeftLine1Input", "familyLeftLine1");
-  bindTextInput("familyLeftLine2Input", "familyLeftLine2");
-  bindTextInput("familyLeftAddressInput", "familyLeftAddress");
-  bindTextInput("familyRightLine1Input", "familyRightLine1");
-  bindTextInput("familyRightLine2Input", "familyRightLine2");
-  bindTextInput("familyRightAddressInput", "familyRightAddress");
-  bindTextInput("lunarDateInput", "lunarDate");
-  bindTextInput("bankNameInput", "bankName");
-  bindTextInput("bankOwnerInput", "bankOwner");
-  bindTextInput("bankNumberInput", "bankNumber");
-  bindTextInput("bankNameBrideInput", "bankNameBride");
-  bindTextInput("bankOwnerBrideInput", "bankOwnerBride");
-  bindTextInput("bankNumberBrideInput", "bankNumberBride");
-  bindTextInput("bankNoteInput", "bankNote");
-
-  bindToggle("toggleIntro", "intro");
-  bindToggle("toggleDetails", "details");
-  bindToggle("toggleCountdown", "countdown");
-  bindToggle("toggleGallery", "gallery");
-  bindToggle("toggleBank", "bank");
-
-  bindImageUpload("coverUpload", (src) => {
-    config.coverImage = src;
-  });
-  bindImageUpload("galleryUpload1", (src) => {
-    config.galleryImages[0] = src;
-  });
-  bindImageUpload("galleryUpload2", (src) => {
-    config.galleryImages[1] = src;
-  });
-  bindImageUpload("galleryUpload3", (src) => {
-    config.galleryImages[2] = src;
-  });
-  bindImageUpload("galleryUpload4", (src) => {
-    config.galleryImages[3] = src;
-  });
-  bindImageUpload("galleryUpload5", (src) => {
-    config.galleryImages[4] = src;
-  });
-  bindImageUpload("galleryUpload6", (src) => {
-    config.galleryImages[5] = src;
-  });
-  bindImageUpload("galleryUpload7", (src) => {
-    config.galleryImages[6] = src;
-  });
-  bindImageUpload("galleryUpload8", (src) => {
-    config.galleryImages[7] = src;
-  });
-  bindImageUpload("galleryUpload9", (src) => {
-    config.galleryImages[8] = src;
-  });
-  bindImageUpload("galleryUpload10", (src) => {
-    config.galleryImages[9] = src;
-  });
-
-  document.querySelectorAll("[data-clear-image]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = Number(btn.dataset.clearImage);
-      if (!Number.isFinite(index)) return;
-      config.galleryImages[index] = "";
-      applyConfig();
-      saveConfig();
-      showToast("Đã xóa ảnh khỏi album.");
-    });
-  });
-
-  bindImageUpload(
-    "qrUpload",
-    (src) => {
-      config.qrImage = src;
-    },
-    { type: "image/png", quality: 0.92, maxSize: 1000 },
-  );
-  bindImageUpload(
-    "qrUploadBride",
-    (src) => {
-      config.qrImageBride = src;
-    },
-    { type: "image/png", quality: 0.92, maxSize: 1000 },
-  );
+  [
+    "groomName",
+    "brideName",
+    "initials",
+    "closingText",
+    "quoteTop",
+    "quoteMain",
+    "quoteBottom",
+    "weddingDateText",
+    "weddingTimeText",
+    "countdownTarget",
+    "introTitle",
+    "introText",
+    "venueName",
+    "venueAddress",
+    "mapLink",
+    "familyLeftLine1",
+    "familyLeftLine2",
+    "familyLeftAddress",
+    "familyRightLine1",
+    "familyRightLine2",
+    "familyRightAddress",
+    "lunarDate",
+    "bankName",
+    "bankOwner",
+    "bankNumber",
+    "bankNameBride",
+    "bankOwnerBride",
+    "bankNumberBride",
+    "bankNote",
+    "musicLink",
+  ].forEach((key) => bindTextInput(`${key}Input`, key));
 
   document.getElementById("replayBtn")?.addEventListener("click", () => {
     replayInvitation();
-    showToast("Đã đưa thiệp về trạng thái chờ mở.");
   });
-  document
-    .getElementById("resetBtn")
-    ?.addEventListener("click", resetToDefault);
 }
 
 /* =========================
-   COUNTDOWN
+   HEART RAIN ANIMATION (2 GIÂY TRONG SUỐT)
 ========================= */
-function updateCountdown() {
-  clearInterval(countdownTimer);
-  const target = new Date(
-    els.siteRoot?.dataset.countdownTarget || "",
-  ).getTime();
-  if (!Number.isFinite(target)) return;
-  const tick = () => {
-    const diff = target - Date.now();
-    const values =
-      diff > 0
-        ? {
-            days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-            mins: Math.floor((diff / (1000 * 60)) % 60),
-            secs: Math.floor((diff / 1000) % 60),
-          }
-        : { days: 0, hours: 0, mins: 0, secs: 0 };
-    const pairs = {
-      "count-days": values.days,
-      "count-hours": values.hours,
-      "count-mins": values.mins,
-      "count-secs": values.secs,
-    };
-    Object.entries(pairs).forEach(([id, value]) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = String(value).padStart(2, "0");
-    });
-  };
-  tick();
-  countdownTimer = setInterval(tick, 1000);
-}
-
-/* =========================
-   PETALS
-========================= */
-function startPetals() {
-  clearInterval(petalTimer);
-  if (!els.petalsLayer) return;
-  petalTimer = setInterval(() => {
-    const petal = document.createElement("span");
-    petal.className = "petal";
-    petal.style.left = Math.random() * 100 + "%";
-    petal.style.setProperty("--drift-x", `${Math.random() * 120 - 60}px`);
-    petal.style.animationDuration = `${4.8 + Math.random() * 3.6}s`;
-    petal.style.width = `${10 + Math.random() * 10}px`;
-    petal.style.height = `${10 + Math.random() * 10}px`;
-    els.petalsLayer.appendChild(petal);
-    setTimeout(() => petal.remove(), 9000);
-  }, 340);
-}
-
-/* =========================
-   OPENING / REVEAL & GIANT FIREWORKS
-========================= */
-function triggerFireworks() {
+function triggerHeartBurst() {
   if (!els.heartFireworksContainer) return;
 
-  // 1. Phủ ngay lớp màn trắng mượt mà
+  // 1. Phủ màn trắng
   els.heartFireworksContainer.classList.add("flash-white");
 
-  // 2. Kích hoạt tim đỏ khổng lồ
-  const heart = document.createElement("div");
-  heart.className = "fw-heart animate";
-  els.heartFireworksContainer.appendChild(heart);
+  // 2. Trái tim khổng lồ nhịp đập
+  const giantHeart = document.createElement("div");
+  giantHeart.className = "fw-heart animate";
+  els.heartFireworksContainer.appendChild(giantHeart);
 
-  // 3. Đúng nhịp tim nổ (700ms) tung 200 hạt pháo hoa bự & nhiều màu
+  // 3. Đúng 700ms trái tim nổ tung thành mưa tim nhỏ
   setTimeout(() => {
-    // Bảng màu rực rỡ để nổi bật tuyệt đối trên nền trắng
-    const colors = [
-      "#e63946",
-      "#ff006e",
-      "#a200ff",
-      "#00e5ff",
-      "#3a86ff",
-      "#ffb703",
-      "#fb8500",
-      "#f0d28a",
-      "#1d3557",
-    ];
-    const particleCount = 200;
-
+    const particleCount = 140; // 140 trái tim nhỏ
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement("div");
-      p.className = "fw-particle";
+      p.className = "fw-small-heart";
 
+      // Phân bổ bắn đều ra 360 độ
       const angle = Math.random() * Math.PI * 2;
-      // Vận tốc siêu rộng để bay phủ cả màn hình
-      const velocity = 100 + Math.random() * 450;
+      // Vận tốc bung ra
+      const velocity = 80 + Math.random() * 250;
       const tx = Math.cos(angle) * velocity;
       const ty = Math.sin(angle) * velocity;
 
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      p.style.color = color;
-      p.style.backgroundColor = color;
-
-      // Hạt to từ 6px đến 18px
-      const size = Math.random() * 12 + 6;
+      // Random độ trong suốt và kích thước
+      p.style.opacity = (Math.random() * 0.5 + 0.4).toFixed(2); // Trong suốt từ 0.4 đến 0.9
+      const size = Math.random() * 14 + 10; // Kích thước từ 10px đến 24px
       p.style.width = `${size}px`;
       p.style.height = `${size}px`;
 
       els.heartFireworksContainer.appendChild(p);
 
-      // Ty + 250px tạo trọng lực siêu thật (hạt rớt mạnh hơn khi đã bung)
+      // Cho rớt xuống sâu (ty + 600px) và xoay lộn xộn trong không trung
       p.animate(
         [
-          { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+          { transform: `translate(0, 0) scale(1) rotate(0deg)` },
           {
-            transform: `translate(${tx}px, ${ty + 250}px) scale(0)`,
-            opacity: 0,
+            transform: `translate(${tx}px, ${ty + 600}px) scale(0.6) rotate(${Math.random() * 200 - 100}deg)`,
           },
         ],
         {
-          duration: 800 + Math.random() * 800, // Kéo dài từ 0.8s tới 1.6s
+          duration: 1800 + Math.random() * 600, // Tim rơi lác đác trong khoảng 1.8s - 2.4s
           easing: "cubic-bezier(0.25, 1, 0.5, 1)",
           fill: "forwards",
         },
       );
 
-      setTimeout(() => p.remove(), 1600);
+      // Rơi xong thì dọn dẹp
+      setTimeout(() => p.remove(), 2600);
     }
   }, 700);
 
-  // Dọn tim sau khi nổ xong
-  setTimeout(() => heart.remove(), 1200);
+  // Dọn tim to
+  setTimeout(() => giantHeart.remove(), 1200);
 
-  // Mở dần rèm trắng để hiện thiệp sau đó
+  // Gỡ màn trắng từ từ
   setTimeout(() => {
     els.heartFireworksContainer.classList.remove("flash-white");
-  }, 1600);
+  }, 2500);
 }
 
 function revealSequential() {
@@ -855,286 +373,90 @@ function revealSequential() {
 }
 
 function openInvitation() {
-  // Ẩn lớp vỏ ngoài
   els.openingStage?.classList.add("is-opening");
 
-  // Trình diễn pháo hoa
-  triggerFireworks();
+  // Kích hoạt mưa tim
+  triggerHeartBurst();
 
-  // Đẩy thiệp lên khi nền trắng chuẩn bị mờ đi
+  // BẬT NHẠC
+  if (
+    els.bgMusic &&
+    els.bgMusic.src &&
+    els.bgMusic.src !== window.location.href
+  ) {
+    els.bgMusic
+      .play()
+      .then(() => {
+        els.musicToggle.classList.add("playing");
+        els.musicToggle.style.display = "flex"; // Hiện nút tắt bật
+      })
+      .catch((e) => console.log("Trình duyệt chặn autoplay âm thanh."));
+  }
+
+  // Đợi mưa tim rơi gần xong (khoảng 2.6 giây) thì mới từ từ hiện thiệp lên
   setTimeout(() => {
     els.siteRoot?.classList.add("is-visible");
     revealSequential();
-  }, 1000);
+  }, 2600);
 
-  // Clean hoàn toàn vỏ sau đó
+  // Clean hoàn toàn vỏ thiệp
   setTimeout(() => {
     els.openingStage?.classList.add("is-opened");
-  }, 1800);
+  }, 3400);
 }
 
 function replayInvitation() {
   els.openingStage?.classList.remove("is-opened", "is-opening");
   els.openingStage?.removeAttribute("hidden");
   els.siteRoot?.classList.remove("is-visible");
-
-  // Reset trạng thái nền trắng
   els.heartFireworksContainer?.classList.remove("flash-white");
 
-  if (els.siteRoot) els.siteRoot.scrollTop = 0;
+  if (els.bgMusic) {
+    els.bgMusic.pause();
+    els.bgMusic.currentTime = 0;
+  }
+  if (els.musicToggle) {
+    els.musicToggle.style.display = "none";
+    els.musicToggle.classList.remove("playing");
+  }
 
+  if (els.siteRoot) els.siteRoot.scrollTop = 0;
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     el.classList.remove("is-inview");
   });
 }
 
 /* =========================
-   LIGHTBOX / QR
+   EVENTS & INIT
 ========================= */
-function getGallerySources() {
-  return galleryIds
-    .map((id) => document.getElementById(id)?.src)
-    .filter(Boolean);
-}
+document
+  .querySelectorAll("[data-open-invitation]")
+  .forEach((btn) => btn.addEventListener("click", openInvitation));
 
-function renderLightboxThumbs() {
-  if (!els.lightboxThumbs) return;
-  const sources = getGallerySources();
-  els.lightboxThumbs.innerHTML = "";
-  sources.forEach((src, index) => {
-    const thumb = document.createElement("img");
-    thumb.src = src;
-    thumb.alt = "Ảnh thu nhỏ " + (index + 1);
-    if (index === currentLightboxIndex) {
-      thumb.classList.add("active");
-    }
-    thumb.addEventListener("click", () => {
-      currentLightboxIndex = index;
-      updateLightbox();
-    });
-    els.lightboxThumbs.appendChild(thumb);
-  });
-}
-
-function updateLightbox() {
-  const sources = getGallerySources();
-  if (!sources.length) return;
-  currentLightboxIndex =
-    (currentLightboxIndex + sources.length) % sources.length;
-  if (els.lightboxImage) {
-    els.lightboxImage.src = sources[currentLightboxIndex];
-  }
-  if (els.lightboxCounter) {
-    els.lightboxCounter.textContent = `${currentLightboxIndex + 1} / ${sources.length}`;
-  }
-  renderLightboxThumbs();
-}
-
-function openLightbox(index) {
-  currentLightboxIndex = index;
-  els.lightbox?.classList.add("show");
-  updateLightbox();
-}
-function closeLightbox() {
-  els.lightbox?.classList.remove("show");
-}
-
-function bindPreviewActions() {
-  document.querySelectorAll("[data-open-invitation]").forEach((btn) => {
-    btn.addEventListener("click", openInvitation);
-  });
-  document.querySelectorAll("[data-gallery-index]").forEach((item) => {
-    item.addEventListener("click", () => {
-      openLightbox(Number(item.dataset.galleryIndex || 0));
-    });
-  });
-  document
-    .querySelector("[data-close-lightbox]")
-    ?.addEventListener("click", closeLightbox);
-  document
-    .querySelector("[data-lightbox-prev]")
-    ?.addEventListener("click", () => {
-      currentLightboxIndex -= 1;
-      updateLightbox();
-    });
-  document
-    .querySelector("[data-lightbox-next]")
-    ?.addEventListener("click", () => {
-      currentLightboxIndex += 1;
-      updateLightbox();
-    });
-  els.lightbox?.addEventListener("click", (event) => {
-    if (event.target === els.lightbox) closeLightbox();
-  });
-
-  document.querySelectorAll("[data-open-qr]").forEach((btn) => {
-    btn.addEventListener("click", () => els.qrModal?.classList.add("show"));
-  });
-  document.querySelector("[data-close-qr]")?.addEventListener("click", () => {
-    els.qrModal?.classList.remove("show");
-  });
-  els.qrModal?.addEventListener("click", (event) => {
-    if (event.target === els.qrModal) {
-      els.qrModal.classList.remove("show");
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeLightbox();
-      els.qrModal?.classList.remove("show");
-    }
-    if (
-      event.key === "ArrowRight" &&
-      els.lightbox?.classList.contains("show")
-    ) {
-      currentLightboxIndex += 1;
-      updateLightbox();
-    }
-    if (event.key === "ArrowLeft" && els.lightbox?.classList.contains("show")) {
-      currentLightboxIndex -= 1;
-      updateLightbox();
-    }
-  });
-}
-
-/* =========================
-   VIEW MODE
-========================= */
-async function initViewMode() {
-  const params = new URLSearchParams(window.location.search);
-  const hasCard = params.has("card");
-  const editMode =
-    params.get("edit") === "1" ||
-    window.location.protocol === "file:" ||
-    !hasCard;
-  if (!editMode) {
-    document.body.classList.add("guest-view");
-    els.editorShell?.setAttribute("hidden", "hidden");
-  } else {
-    els.editorShell?.removeAttribute("hidden");
-    document.body.classList.remove("guest-view");
-  }
-
-  if (hasCard && canUseRemoteShare()) {
-    try {
-      const row = await fetchRemoteCardBySlug(params.get("card"));
-      if (row?.config) {
-        config = deepMerge(DEFAULT_CONFIG, row.config);
-        populateInputs();
-        applyConfig();
-      }
-    } catch {
-      showToast("Không tải được dữ liệu thiệp từ link.");
-    }
-  }
-
-  setShareStatus(
-    canUseRemoteShare()
-      ? "Mỗi lần bấm <strong>Xuất thiệp online</strong> sẽ tạo ra một thiệp mới và một link mới."
-      : "Chưa cấu hình chia sẻ online. Điền <strong>supabaseUrl</strong> và <strong>supabasePublishableKey</strong> trong file để dùng nút xuất thiệp.",
-    canUseRemoteShare(),
+document
+  .querySelectorAll("[data-open-qr]")
+  .forEach((btn) =>
+    btn.addEventListener("click", () => els.qrModal?.classList.add("show")),
   );
-
-  if (editMode) {
-    replayInvitation();
-  } else {
-    els.openingStage?.classList.remove("is-opened", "is-opening");
-    els.openingStage?.removeAttribute("hidden");
-    els.siteRoot?.classList.remove("is-visible");
-    if (els.siteRoot) els.siteRoot.scrollTop = 0;
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
-      el.classList.remove("is-inview");
-    });
-  }
-}
-
-/* =========================
-   MOBILE / SHARE ACTIONS
-========================= */
-function bindMobileAndShareActions() {
-  document.getElementById("previewModeBtn")?.addEventListener("click", () => {
-    if (isMobileLayout()) {
-      setMobilePreviewMode(true);
-      replayInvitation();
-    } else {
-      showToast("Ở máy tính bạn xem preview ngay bên phải.");
-    }
-  });
-  document.getElementById("mobilePreviewBtn")?.addEventListener("click", () => {
-    setMobilePreviewMode(true);
-    replayInvitation();
-  });
-  const backToEdit = () => setMobilePreviewMode(false);
-  document
-    .getElementById("mobileEditBtn")
-    ?.addEventListener("click", backToEdit);
-  document
-    .getElementById("mobileBackToEditBtn")
-    ?.addEventListener("click", backToEdit);
-  document
-    .getElementById("shareLinkBtn")
-    ?.addEventListener("click", handleCopyShareLink);
-  document
-    .getElementById("mobileCopyLinkBtn")
-    ?.addEventListener("click", handleCopyShareLink);
-  document
-    .getElementById("mobileCopyLinkBtnTop")
-    ?.addEventListener("click", handleCopyShareLink);
-  document.querySelectorAll(".panel-card").forEach((card, index) => {
-    if (index < 6) {
-      card.classList.add("is-collapsible");
-      const heading = card.querySelector("h2");
-      heading?.addEventListener("click", () => {
-        if (!isMobileLayout()) return;
-        card.classList.toggle("is-collapsed");
-      });
-      if (isMobileLayout() && index > 0) {
-        card.classList.add("is-collapsed");
-      }
-    }
-  });
-  window.addEventListener("resize", () => {
-    if (!isMobileLayout()) {
-      setMobilePreviewMode(false);
-      document
-        .querySelectorAll(".panel-card.is-collapsible")
-        .forEach((card) => card.classList.remove("is-collapsed"));
-    }
-  });
-}
-
-window.addEventListener("pageshow", () => {
-  const params = new URLSearchParams(window.location.search);
-  const isGuestView = params.has("card") && params.get("edit") !== "1";
-  if (isGuestView) {
-    els.openingStage?.classList.remove("is-opened", "is-opening");
-    els.openingStage?.removeAttribute("hidden");
-    els.siteRoot?.classList.remove("is-visible");
-    if (els.siteRoot) els.siteRoot.scrollTop = 0;
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
-      el.classList.remove("is-inview");
-    });
-  }
+document
+  .querySelector("[data-close-qr]")
+  ?.addEventListener("click", () => els.qrModal?.classList.remove("show"));
+els.qrModal?.addEventListener("click", (e) => {
+  if (e.target === els.qrModal) els.qrModal.classList.remove("show");
 });
 
-/* =========================
-   RESET & START
-========================= */
-function resetToDefault() {
-  config = cloneDeep(DEFAULT_CONFIG);
-  populateInputs();
-  applyConfig();
-  saveConfig();
-  replayInvitation();
-  showToast("Đã đưa thiệp về bản mặc định.");
-}
-
-bindPreviewActions();
-bindEditor();
-bindMobileAndShareActions();
 populateInputs();
 applyConfig();
-startPetals();
-initViewMode();
-saveConfig();
+
+const params = new URLSearchParams(window.location.search);
+if (
+  params.get("edit") !== "1" &&
+  window.location.protocol !== "file:" &&
+  params.has("card")
+) {
+  document.body.classList.add("guest-view");
+  els.editorShell?.setAttribute("hidden", "hidden");
+} else {
+  replayInvitation();
+}
+bindEditor();

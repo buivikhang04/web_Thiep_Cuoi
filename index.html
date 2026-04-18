@@ -72,8 +72,17 @@
         </section>
 
         <section class="panel-card">
-          <h2>2. Thông tin thiệp</h2>
+          <h2>2. Thông tin & Nhạc nền</h2>
           <div class="panel-grid">
+            <div class="field">
+              <label for="musicLinkInput">Link nhạc nền (File MP3)</label>
+              <input
+                id="musicLinkInput"
+                type="url"
+                placeholder="https://.../bai-hat.mp3"
+              />
+            </div>
+
             <div class="field-row">
               <div class="field">
                 <label for="dateTextInput">Ngày cưới hiển thị</label>
@@ -112,45 +121,42 @@
               <input
                 id="mapLinkInput"
                 type="url"
-                placeholder="https://maps.google.com/..."
+                placeholder="http://googleusercontent.com/maps..."
               />
             </div>
 
             <div class="field-row">
               <div class="field">
-                <label for="familyLeftLine1Input">Ông bên nhà trai</label>
-                <input id="familyLeftLine1Input" type="text" />
+                <label for="familyLeftLine1Input">Ông nhà trai</label
+                ><input id="familyLeftLine1Input" type="text" />
               </div>
               <div class="field">
-                <label for="familyRightLine1Input">Ông bên nhà gái</label>
-                <input id="familyRightLine1Input" type="text" />
+                <label for="familyRightLine1Input">Ông nhà gái</label
+                ><input id="familyRightLine1Input" type="text" />
               </div>
             </div>
-
             <div class="field-row">
               <div class="field">
-                <label for="familyLeftLine2Input">Bà bên nhà trai</label>
-                <input id="familyLeftLine2Input" type="text" />
+                <label for="familyLeftLine2Input">Bà nhà trai</label
+                ><input id="familyLeftLine2Input" type="text" />
               </div>
               <div class="field">
-                <label for="familyRightLine2Input">Bà bên nhà gái</label>
-                <input id="familyRightLine2Input" type="text" />
+                <label for="familyRightLine2Input">Bà nhà gái</label
+                ><input id="familyRightLine2Input" type="text" />
               </div>
             </div>
-
             <div class="field-row">
               <div class="field">
-                <label for="familyLeftAddressInput">Địa chỉ nhà trai</label>
-                <textarea id="familyLeftAddressInput"></textarea>
+                <label for="familyLeftAddressInput">Địa chỉ trai</label
+                ><textarea id="familyLeftAddressInput"></textarea>
               </div>
               <div class="field">
-                <label for="familyRightAddressInput">Địa chỉ nhà gái</label>
-                <textarea id="familyRightAddressInput"></textarea>
+                <label for="familyRightAddressInput">Địa chỉ gái</label
+                ><textarea id="familyRightAddressInput"></textarea>
               </div>
             </div>
-
             <div class="field">
-              <label for="lunarDateInput">Dòng âm lịch / nhằm ngày</label>
+              <label for="lunarDateInput">Dòng âm lịch</label>
               <input id="lunarDateInput" type="text" />
             </div>
           </div>
@@ -164,17 +170,17 @@
             </h4>
             <div class="field-row">
               <div class="field">
-                <label for="bankNameInput">Ngân hàng</label>
-                <input id="bankNameInput" type="text" />
+                <label for="bankNameInput">Ngân hàng</label
+                ><input id="bankNameInput" type="text" />
               </div>
               <div class="field">
-                <label for="bankOwnerInput">Chủ tài khoản</label>
-                <input id="bankOwnerInput" type="text" />
+                <label for="bankOwnerInput">Chủ tài khoản</label
+                ><input id="bankOwnerInput" type="text" />
               </div>
             </div>
             <div class="field">
-              <label for="bankNumberInput">Số tài khoản</label>
-              <input id="bankNumberInput" type="text" />
+              <label for="bankNumberInput">Số tài khoản</label
+              ><input id="bankNumberInput" type="text" />
             </div>
 
             <hr
@@ -190,19 +196,18 @@
             </h4>
             <div class="field-row">
               <div class="field">
-                <label for="bankNameBrideInput">Ngân hàng</label>
-                <input id="bankNameBrideInput" type="text" />
+                <label for="bankNameBrideInput">Ngân hàng</label
+                ><input id="bankNameBrideInput" type="text" />
               </div>
               <div class="field">
-                <label for="bankOwnerBrideInput">Chủ tài khoản</label>
-                <input id="bankOwnerBrideInput" type="text" />
+                <label for="bankOwnerBrideInput">Chủ tài khoản</label
+                ><input id="bankOwnerBrideInput" type="text" />
               </div>
             </div>
             <div class="field">
-              <label for="bankNumberBrideInput">Số tài khoản</label>
-              <input id="bankNumberBrideInput" type="text" />
+              <label for="bankNumberBrideInput">Số tài khoản</label
+              ><input id="bankNumberBrideInput" type="text" />
             </div>
-
             <div class="field" style="margin-top: 10px">
               <label for="bankNoteInput">Ghi chú chung</label>
               <input id="bankNoteInput" type="text" />
@@ -217,24 +222,25 @@
               <label for="coverUpload">Ảnh bìa chính</label>
               <input id="coverUpload" type="file" accept="image/*" />
             </div>
-
             <div class="field-row">
               <div class="field">
-                <label for="qrUpload">Ảnh QR Nhà Trai</label>
-                <input id="qrUpload" type="file" accept="image/*" />
+                <label for="qrUpload">QR Nhà Trai</label
+                ><input id="qrUpload" type="file" accept="image/*" />
               </div>
               <div class="field">
-                <label for="qrUploadBride">Ảnh QR Nhà Gái</label>
-                <input id="qrUploadBride" type="file" accept="image/*" />
+                <label for="qrUploadBride">QR Nhà Gái</label
+                ><input id="qrUploadBride" type="file" accept="image/*" />
               </div>
             </div>
-
             <div class="field-row">
               <div class="field">
-                <label for="galleryUpload1">Ảnh album 1</label>
+                <label>Ảnh album 1</label>
                 <div class="field-file-actions">
-                  <input id="galleryUpload1" type="file" accept="image/*" />
-                  <button
+                  <input
+                    id="galleryUpload1"
+                    type="file"
+                    accept="image/*"
+                  /><button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="0"
@@ -244,10 +250,13 @@
                 </div>
               </div>
               <div class="field">
-                <label for="galleryUpload2">Ảnh album 2</label>
+                <label>Ảnh album 2</label>
                 <div class="field-file-actions">
-                  <input id="galleryUpload2" type="file" accept="image/*" />
-                  <button
+                  <input
+                    id="galleryUpload2"
+                    type="file"
+                    accept="image/*"
+                  /><button
                     class="btn-mini-delete"
                     type="button"
                     data-clear-image="1"
@@ -257,10 +266,9 @@
                 </div>
               </div>
             </div>
-
             <div class="field-row">
               <div class="field">
-                <label for="galleryUpload3">Ảnh album 3</label>
+                <label>Ảnh album 3</label>
                 <div class="field-file-actions">
                   <input
                     id="galleryUpload3"
@@ -276,7 +284,7 @@
                 </div>
               </div>
               <div class="field">
-                <label for="galleryUpload4">Ảnh album 4</label>
+                <label>Ảnh album 4</label>
                 <div class="field-file-actions">
                   <input
                     id="galleryUpload4"
@@ -292,108 +300,6 @@
                 </div>
               </div>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="galleryUpload5">Ảnh album 5</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload5"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="4"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-              <div class="field">
-                <label for="galleryUpload6">Ảnh album 6</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload6"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="5"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="galleryUpload7">Ảnh album 7</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload7"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="6"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-              <div class="field">
-                <label for="galleryUpload8">Ảnh album 8</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload8"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="7"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="galleryUpload9">Ảnh album 9</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload9"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="8"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-              <div class="field">
-                <label for="galleryUpload10">Ảnh album 10</label>
-                <div class="field-file-actions">
-                  <input
-                    id="galleryUpload10"
-                    type="file"
-                    accept="image/*"
-                  /><button
-                    class="btn-mini-delete"
-                    type="button"
-                    data-clear-image="9"
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -401,32 +307,32 @@
           <h2>6. Bật / tắt khối</h2>
           <div class="toggle-stack">
             <div class="toggle-row">
-              <span>Lời ngỏ</span>
-              <label class="switch"
+              <span>Lời ngỏ</span
+              ><label class="switch"
                 ><input id="toggleIntro" type="checkbox" /><span></span
               ></label>
             </div>
             <div class="toggle-row">
-              <span>Chi tiết lễ cưới</span>
-              <label class="switch"
+              <span>Chi tiết lễ cưới</span
+              ><label class="switch"
                 ><input id="toggleDetails" type="checkbox" /><span></span
               ></label>
             </div>
             <div class="toggle-row">
-              <span>Đếm ngược</span>
-              <label class="switch"
+              <span>Đếm ngược</span
+              ><label class="switch"
                 ><input id="toggleCountdown" type="checkbox" /><span></span
               ></label>
             </div>
             <div class="toggle-row">
-              <span>Album ảnh</span>
-              <label class="switch"
+              <span>Album ảnh</span
+              ><label class="switch"
                 ><input id="toggleGallery" type="checkbox" /><span></span
               ></label>
             </div>
             <div class="toggle-row">
-              <span>Hộp mừng cưới</span>
-              <label class="switch"
+              <span>Hộp mừng cưới</span
+              ><label class="switch"
                 ><input id="toggleBank" type="checkbox" /><span></span
               ></label>
             </div>
@@ -459,6 +365,28 @@
 
     <div class="preview-shell" id="preview-shell">
       <div class="preview-surface" id="preview-surface">
+        <audio id="bg-music" loop preload="auto"></audio>
+        <button
+          id="music-toggle"
+          class="music-toggle"
+          aria-label="Bật/Tắt nhạc"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            stroke="currentColor"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+        </button>
+
         <div id="heart-fireworks-container" class="heart-fw-container"></div>
         <div class="petals-layer" id="petals-layer"></div>
 
@@ -559,24 +487,9 @@
                   class="btn-download-qr"
                   onclick="downloadQR('qr-image', 'QR_ChuRe.png')"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
                   Lưu QR
                 </button>
               </div>
-
               <div class="qr-person-card">
                 <div class="qr-role">
                   Cô Dâu - <span id="bank-bride-name">Thanh Mai</span>
@@ -595,20 +508,6 @@
                   class="btn-download-qr"
                   onclick="downloadQR('qr-image-bride', 'QR_CoDau.png')"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
                   Lưu QR
                 </button>
               </div>
@@ -630,22 +529,15 @@
                 <div class="hero-quote-bottom" id="quote-bottom">need is</div>
               </div>
               <div class="hero-image-wrap">
-                <img
-                  class="hero-image"
-                  id="hero-image"
-                  src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80"
-                  alt="Ảnh cưới"
-                />
+                <img class="hero-image" id="hero-image" src="" alt="Ảnh cưới" />
               </div>
               <div class="couple-names">
-                <span id="hero-groom">Phi Phàm</span>
-                <span class="amp">&</span>
-                <span id="hero-bride">Thị Hoa</span>
+                <span id="hero-groom">Phi Phàm</span><span class="amp">&</span
+                ><span id="hero-bride">Thị Hoa</span>
               </div>
               <div class="hero-meta">
-                <span id="hero-date">2 Tháng 5, 2026</span>
-                <span>•</span>
-                <span id="hero-time">9:00</span>
+                <span id="hero-date">2 Tháng 5, 2026</span><span>•</span
+                ><span id="hero-time">9:00</span>
               </div>
             </div>
           </section>
@@ -654,8 +546,7 @@
             <div class="section-card">
               <h2 class="section-head" id="intro-title">Trân trọng kính mời</h2>
               <p class="section-sub" id="intro-text">
-                Đến dự buổi tiệc chung vui cùng gia đình chúng tôi. Sự hiện diện
-                của bạn là món quà quý giá nhất cho hành trình yêu thương này.
+                Đến dự buổi tiệc chung vui cùng gia đình chúng tôi.
               </p>
             </div>
           </section>
@@ -663,7 +554,6 @@
           <section class="section reveal" id="section-details" data-reveal>
             <div class="section-card wedding-info-card">
               <div class="wedding-info-head">Thông tin lễ cưới</div>
-
               <div class="family-grid">
                 <div class="family-col">
                   <div class="family-role">Ông Bà</div>
@@ -676,7 +566,7 @@
                     </div>
                   </div>
                   <div class="family-address" id="family-left-address">
-                    Số 9, Ngõ 102 Trường Chinh, Đống Đa, Hà Nội
+                    Hà Nội
                   </div>
                 </div>
                 <div class="family-divider"></div>
@@ -691,15 +581,15 @@
                     </div>
                   </div>
                   <div class="family-address" id="family-right-address">
-                    Số 32, Phố Đội Cấn, Ba Đình, Hà Nội
+                    Hà Nội
                   </div>
                 </div>
               </div>
 
               <div class="wedding-announcement">
                 <div class="wedding-announce">
-                  <span>Trân trọng báo tin</span>
-                  <span>Lễ thành hôn của con chúng tôi</span>
+                  <span>Trân trọng báo tin</span
+                  ><span>Lễ thành hôn của con chúng tôi</span>
                 </div>
                 <p class="couple-display-name" id="detail-groom-name">
                   Vũ Đức Anh
@@ -710,8 +600,8 @@
                 </p>
 
                 <div class="ceremony-copy">
-                  <span>Lễ thành hôn được cử hành tại</span>
-                  <strong id="venue-name">Tư gia</strong>
+                  <span>Lễ thành hôn được cử hành tại</span
+                  ><strong id="venue-name">Tư gia</strong>
                   <span>Vào lúc <strong id="event-time">09:00</strong></span>
                 </div>
 
@@ -722,14 +612,11 @@
                     Tháng <span id="detail-month">05</span>
                   </div>
                 </div>
-
                 <div class="date-year" id="detail-year">2026</div>
                 <div class="lunar-date" id="detail-lunar">
                   (Tức ngày 24/03 năm Bính Ngọ)
                 </div>
-                <div class="event-place-line" id="venue-address">
-                  29 Láng Hạ, Phường Láng Hạ, Hà Nội
-                </div>
+                <div class="event-place-line" id="venue-address">Hà Nội</div>
                 <a
                   class="inline-btn"
                   id="map-button"
@@ -744,7 +631,7 @@
 
           <section class="section reveal" id="section-countdown" data-reveal>
             <div class="section-card countdown-wrap">
-              <h2 class="section-head small">Cùng đếm ngược đến ngày vui</h2>
+              <h2 class="section-head small">Cùng đếm ngược</h2>
               <div class="countdown-grid">
                 <div class="countdown-item">
                   <span class="countdown-num" id="count-days">00</span
@@ -770,8 +657,7 @@
             <div class="gallery-shell clip-style">
               <h2 class="section-head">Album ảnh cưới</h2>
               <p class="section-sub">
-                Những khoảnh khắc tụi mình muốn chia sẻ cùng bạn trong ngày đặc
-                biệt.
+                Những khoảnh khắc tụi mình muốn chia sẻ.
               </p>
               <div class="gallery-grid">
                 <div class="gallery-item" data-gallery-index="0">
@@ -791,12 +677,9 @@
                 </div>
               </div>
               <div class="gallery-hidden-sources" aria-hidden="true">
-                <img id="gallery-5" src="" alt="Ảnh cưới 5" />
-                <img id="gallery-6" src="" alt="Ảnh cưới 6" />
-                <img id="gallery-7" src="" alt="Ảnh cưới 7" />
-                <img id="gallery-8" src="" alt="Ảnh cưới 8" />
-                <img id="gallery-9" src="" alt="Ảnh cưới 9" />
-                <img id="gallery-10" src="" alt="Ảnh cưới 10" />
+                <img id="gallery-5" src="" /> <img id="gallery-6" src="" />
+                <img id="gallery-7" src="" /> <img id="gallery-8" src="" />
+                <img id="gallery-9" src="" /> <img id="gallery-10" src="" />
               </div>
             </div>
           </section>
@@ -805,39 +688,24 @@
             <div class="section-card gift-card">
               <h2 class="section-head">Hộp mừng cưới</h2>
               <p class="gift-note" id="bank-note-preview">
-                Quét mã QR hoặc chuyển khoản trực tiếp để gửi lời chúc đến tụi
-                mình.
+                Quét mã QR hoặc chuyển khoản
               </p>
               <button class="lixi-btn" type="button" data-open-qr>
-                <span class="lixi-center">
-                  <span class="lixi-badge" id="gift-initials">Đ&T</span>
-                  <span class="lixi-text">Nhấn để mở</span>
-                </span>
+                <span class="lixi-center"
+                  ><span class="lixi-badge" id="gift-initials">Đ&T</span
+                  ><span class="lixi-text">Nhấn để mở</span></span
+                >
               </button>
             </div>
           </section>
 
           <footer class="footer reveal" data-reveal>
             <p class="footer-script" id="closing-text">Thank You</p>
-            <div class="footer-meta">
-              Rất mong được đón tiếp bạn trong ngày vui của chúng mình
-            </div>
+            <div class="footer-meta">Rất mong được đón tiếp bạn</div>
           </footer>
         </main>
       </div>
       <div class="toast" id="toast"></div>
-    </div>
-
-    <div class="mobile-edit-bar" id="mobile-edit-bar">
-      <button class="btn btn-secondary" type="button" id="mobileEditBtn">
-        Sửa
-      </button>
-      <button class="btn btn-primary" type="button" id="mobilePreviewBtn">
-        Xem trước
-      </button>
-      <button class="btn btn-primary" type="button" id="mobileCopyLinkBtn">
-        Sao chép link
-      </button>
     </div>
 
     <script src="app.js"></script>
