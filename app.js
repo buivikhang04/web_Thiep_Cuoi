@@ -78,7 +78,7 @@ const DEFAULT_CONFIG = {
     gallery: true,
     bank: true,
   },
-  audioSrc: "",
+  audioSrc: "cuoi-thoi.mp3",
 };
 
 const galleryIds = [
