@@ -1323,10 +1323,11 @@ img {
   gap: 20px;
   padding: 30px;
   overflow-y: auto;
+  align-items: stretch;
 }
 
 .qr-person-card {
-  flex: 1;
+  flex: 1 1 0;
   background: #fff4f1;
   border-radius: 16px;
   padding: 24px 16px;
@@ -1334,7 +1335,8 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  align-self: stretch;
+  min-height: 100%;
 }
 
 .qr-role {
@@ -1342,6 +1344,12 @@ img {
   font-weight: 700;
   font-size: 15px;
   margin-bottom: 16px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.35;
 }
 
 .qr-img-box {
@@ -1352,6 +1360,7 @@ img {
   margin-bottom: 16px;
   width: 180px;
   height: 180px;
+  flex: 0 0 180px;
 }
 
 .qr-img-box img {
@@ -1365,14 +1374,29 @@ img {
   color: var(--wine);
   font-weight: 600;
   font-size: 14px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   text-transform: uppercase;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .qr-details {
   color: var(--muted);
   font-size: 13px;
   margin-bottom: 20px;
+  min-height: 56px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  line-height: 1.35;
 }
 
 .btn-download-qr {
@@ -1380,6 +1404,8 @@ img {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: 100%;
+  min-height: 44px;
   padding: 10px 24px;
   background: #f3e5e3;
   color: var(--wine);
@@ -2006,37 +2032,44 @@ body.mobile-preview-mode.guest-view .preview-surface {
     flex-direction: row;
     padding: 16px 10px;
     gap: 10px;
+    align-items: stretch;
   }
 
   .qr-person-card {
     padding: 16px 10px;
-    flex: 1;
+    flex: 1 1 0;
+    align-self: stretch;
   }
 
   .qr-img-box {
     width: 120px;
     height: 120px;
+    flex: 0 0 120px;
     padding: 8px;
     margin-bottom: 12px;
-    flex-shrink: 0;
   }
 
   .qr-role {
     font-size: 12px;
     margin-bottom: 8px;
+    min-height: 34px;
   }
 
   .qr-owner {
     font-size: 11px;
+    min-height: 34px;
   }
 
   .qr-details {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     gap: 4px;
     font-size: 11px;
-    margin-bottom: auto !important;
-    padding-bottom: 12px;
+    width: 100%;
+    min-height: 52px;
+    margin-bottom: 12px !important;
+    padding-bottom: 0;
   }
 
   .qr-dot {
@@ -2044,10 +2077,11 @@ body.mobile-preview-mode.guest-view .preview-surface {
   }
 
   .btn-download-qr {
+    width: 100%;
+    min-height: 40px;
     padding: 8px 12px;
     font-size: 11px;
-    width: 100%;
-    margin-top: 0;
+    margin-top: auto;
   }
 
   .music-toggle-btn {
